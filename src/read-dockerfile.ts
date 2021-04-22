@@ -2,9 +2,11 @@ import { promises } from 'fs';
 
 export interface DockerStage {
     baseImage: string;
+    originalName?: string;
     name?: string;
     stepsBeforeInstall: string[];
     stepsAfterInstall: string[];
+    hasInstall: boolean;
 }
 
 
@@ -61,7 +63,8 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             name: stageName,
             baseImage,
             stepsBeforeInstall,
-            stepsAfterInstall
+            stepsAfterInstall,
+            hasInstall: installHit,
         }
     }
 }
