@@ -1,0 +1,38 @@
+{
+  "name": "lerna-dockerize",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index",
+  "types": "index",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "ts-node -P ./tsconfig.test.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
+    "test:coverage": "ts-node -P ./tsconfig.test.json node_modules/nyc/bin/nyc.js npm run test",
+    "lint": "eslint -c .eslintrc.js --ext .ts ."
+  },
+  "author": "rudxde",
+  "repository": "",
+  "bugs": "",
+  "dependencies": {
+    "@lerna/command": "^4.0.0",
+    "@lerna/filter-options": "^4.0.0",
+    "@lerna/project": "^4.0.0",
+    "@lerna/run-topologically": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.6.2",
+    "@types/node": "^14.14.41",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "eslint": "^7.14.0",
+    "jasmine": "^3.6.3",
+    "nyc": "^15.1.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0"
+}
