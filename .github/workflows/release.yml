@@ -45,6 +45,7 @@ jobs:
       - run: npm ci
       - run: npm run bootstrap
       - run: npm run build:prod
+      - run: cp README.md packages/lerna-dockerize/README.md
       - name: cleanup node_modules
         run: |
           npm run clean
