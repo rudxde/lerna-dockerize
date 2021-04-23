@@ -73,7 +73,12 @@ export class Package {
         }
         const result: string[] = [];
         for (let stage of this.dockerFile) {
-            result.push(`FROM ${stage.baseImage} as ${stage.name!}`);
+            let baseImage = stage.baseImage;
+            const baseImageIsLocalStage = this.dockerFile!.find(x => x.originalName === baseImage);
+            if (baseImageIsLocalStage) {
+                baseImage = baseImageIsLocalStage.name!;
+            }
+            result.push(`FROM ${baseImage} as ${stage.name!}`);
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
             result.push(...this.fixStepsPaths(stage.stepsBeforeInstall));
             if (!stage.hasInstall) {
