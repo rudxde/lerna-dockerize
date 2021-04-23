@@ -1,3 +1,4 @@
+import 'jasmine';
 import { promises } from 'fs';
 import { readStage, splitInSteps, readDockerfile } from '../src/read-dockerfile';
 
@@ -32,6 +33,7 @@ describe('readDockerfile', () => {
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
+                hasInstall: true,
             }]);
         });
 
@@ -52,12 +54,14 @@ describe('readDockerfile', () => {
                     name: 'build',
                     stepsBeforeInstall: ['COPY ./file ./somewhere'],
                     stepsAfterInstall: ['RUN npm run build'],
+                    hasInstall: true,
                 },
                 {
                     baseImage: 'nginx:latest',
                     name: undefined,
                     stepsBeforeInstall: [],
                     stepsAfterInstall: ['ENTRYPOINT ["entrypoint.sh"]'],
+                    hasInstall: true,
                 },
             ]);
         });
