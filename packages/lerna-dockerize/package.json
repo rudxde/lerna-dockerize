@@ -43,5 +43,10 @@
   "engines": {
     "node": ">=12"
   },
+  "files": [
+    "package*.json",
+    "README.md",
+    "dist/**"
+  ],
   "license": "Apache-2.0"
 }
