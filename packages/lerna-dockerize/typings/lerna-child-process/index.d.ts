@@ -5,21 +5,21 @@ declare module '@lerna/child-process' {
      * @param {string[]} args
      * @param {import("execa").Options} [opts]
      */
-    export function exec(command: string, args: string[], opts?: import("execa").Options): Promise<import("execa").ExecaReturnValue<string>>;
+    export function exec(command: string, args: string[], opts?: import('execa').Options): Promise<import('execa').ExecaReturnValue<string>>;
     /**
      * Execute a command synchronously.
      * @param {string} command
      * @param {string[]} args
      * @param {import("execa").SyncOptions} [opts]
      */
-    export function execSync(command: string, args: string[], opts?: import("execa").SyncOptions): string;
+    export function execSync(command: string, args: string[], opts?: import('execa').SyncOptions): string;
     /**
      * Spawn a command asynchronously, _always_ inheriting stdio.
      * @param {string} command
      * @param {string[]} args
      * @param {import("execa").Options} [opts]
      */
-    export function spawn(command: string, args: string[], opts?: import("execa").Options): Promise<import("execa").ExecaReturnValue<string>>;
+    export function spawn(command: string, args: string[], opts?: import('execa').Options): Promise<import('execa').ExecaReturnValue<string>>;
     /**
      * Spawn a command asynchronously, streaming stdio with optional prefix.
      * @param {string} command
@@ -27,13 +27,18 @@ declare module '@lerna/child-process' {
      * @param {import("execa").Options} [opts]
      * @param {string} [prefix]
      */
-    export function spawnStreaming(command: string, args: string[], opts?: import("execa").Options, prefix?: string): Promise<import("execa").ExecaReturnValue<string>>;
+    export function spawnStreaming(
+        command: string,
+        args: string[],
+        opts?: import('execa').Options,
+        prefix?: string,
+    ): Promise<import('execa').ExecaReturnValue<string>>;
     export function getChildProcessCount(): number;
     /**
      * @param {import("execa").ExecaError<string>} result
      * @returns {number}
      */
-    export function getExitCode(result: import("execa").ExecaError<string>): number;
+    export function getExitCode(result: import('execa').ExecaError<string>): number;
     /**
      * Provided to any execa-based call
      */

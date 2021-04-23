@@ -18,6 +18,9 @@ declare module '@lerna/query-graph' {
      * A mutable PackageGraph used to query for next available packages.
      */
     export class QueryGraph {
+        graph: any;
+        cycles: any;
+        constructor(packages: any[], { graphType, rejectCycles }?: QueryGraphConfig);
         /**
          * Sort a list of Packages topologically.
          *
@@ -31,9 +34,6 @@ declare module '@lerna/query-graph' {
          * @param {import("@lerna/package").Package[]} packages An array of Packages to build the graph out of
          * @param {QueryGraphConfig} [options]
          */
-        constructor(packages: any[], { graphType, rejectCycles }?: QueryGraphConfig);
-        graph: any;
-        cycles: any;
         _getNextLeaf(): any[];
         _getNextCycle(): any;
         getAvailablePackages(): any;

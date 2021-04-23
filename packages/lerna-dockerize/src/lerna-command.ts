@@ -9,13 +9,13 @@ import { readDockerfile } from './read-dockerfile';
 export class Dockerize extends Command {
     filteredPackages: Package[] = [];
 
-    get requiresGit() {
+    get requiresGit(): boolean {
         return false;
     }
-    async initialize() {
+    async initialize(): Promise<void> {
         this.filteredPackages = await getFilteredPackages(this.packageGraph, this.execOpts, this.options);
     }
-    async execute() {
+    async execute(): Promise<void> {
         const baseDockerFileName = 'Dockerfile.base';
         const templateDockerFileName = 'Dockerfile.template';
         const baseDockerFile = await readDockerfile(baseDockerFileName);

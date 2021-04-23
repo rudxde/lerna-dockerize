@@ -36,6 +36,22 @@ declare module '@lerna/package' {
      * many values resolved directly from the original JSON.
      */
     export class Package {
+        name: string;
+        [PKG]: RawManifest;
+        [_location]: string;
+        [_resolved]: any;
+        [_rootPath]: string;
+        [_scripts]: {
+            [x: string]: string;
+        };
+        [_contents]: any;
+        /**
+        * @param {RawManifest} pkg
+        * @param {string} location
+        * @param {string} [rootPath]
+        */
+        constructor(pkg: RawManifest, location: string, rootPath?: string);
+
         /**
          * Create a Package instance from parameters, possibly reusing existing instance.
          * @param {string|Package|RawManifest} ref A path to a package.json file, Package instance, or JSON object
@@ -43,13 +59,7 @@ declare module '@lerna/package' {
          * @returns {Package}
          */
         static lazy(ref: string | Package | RawManifest, dir?: string): Package;
-        /**
-         * @param {RawManifest} pkg
-         * @param {string} location
-         * @param {string} [rootPath]
-         */
-        constructor(pkg: RawManifest, location: string, rootPath?: string);
-        name: string;
+
         get location(): string;
         get private(): boolean;
         get resolved(): any;
@@ -106,14 +116,6 @@ declare module '@lerna/package' {
          * @param {String} savePrefix npm_config_save_prefix
          */
         updateLocalDependency(resolved: any, depVersion: string, savePrefix: string): void;
-        [PKG]: RawManifest;
-        [_location]: string;
-        [_resolved]: any;
-        [_rootPath]: string;
-        [_scripts]: {
-            [x: string]: string;
-        };
-        [_contents]: any;
     }
     const PKG: unique symbol;
     const _location: unique symbol;

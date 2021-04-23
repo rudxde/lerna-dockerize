@@ -56,11 +56,11 @@ export class Package {
         return '/app/' + this.relativePath;
     }
 
-    getPackageStageNamePrefix() {
+    getPackageStageNamePrefix(): string {
         return this.name.replace(/@/gm, '').replace(/\//gm, '_');
     }
 
-    getBuildStageName() {
+    getBuildStageName(): string | undefined {
         if (!this.dockerFile) {
             return undefined;
         }
@@ -93,8 +93,11 @@ export class Package {
                 });
 
             for (let dependencyPackage of dependencyPackages) {
-                result.push(`COPY --from=${dependencyPackage.getBuildStageName()} ${normalizePath(joinPath(dependencyPackage.dockerWorkingDir, 'package.json'))} ${dependencyPackage.dockerWorkingDir}/`);
-                dependencyCopyContent.push(`COPY --from=${dependencyPackage.getBuildStageName()} ${dependencyPackage.dockerWorkingDir}/ ${dependencyPackage.dockerWorkingDir}/`);
+                const fromStageName = dependencyPackage.getBuildStageName();
+                const dependencyWorkingDir = dependencyPackage.dockerWorkingDir;
+                const packageJsonPath = normalizePath(joinPath(dependencyWorkingDir, 'package.json'));
+                result.push(`COPY --from=${fromStageName} ${packageJsonPath} ${dependencyWorkingDir}/`);
+                dependencyCopyContent.push(`COPY --from=${fromStageName} ${dependencyWorkingDir}/ ${dependencyWorkingDir}/`);
             }
 
             result.push(`RUN npx lerna bootstrap --scope=${this.name} --includeDependencies`);
@@ -114,8 +117,8 @@ export class Package {
             originalName: stage.name,
             stepsBeforeInstall: [...stage.stepsBeforeInstall],
             stepsAfterInstall: [...stage.stepsAfterInstall],
-            hasInstall: stage.hasInstall
-        }
+            hasInstall: stage.hasInstall,
+        };
     }
 
 

@@ -1,7 +1,7 @@
 import { Dockerize } from './lerna-command';
 
 
-async function main() {
+async function main(): Promise<void> {
     new Dockerize(process.argv);
 }
 

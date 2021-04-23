@@ -3,17 +3,12 @@ declare module '@lerna/package-graph' {
  * A node in a PackageGraph.
  */
     export class PackageGraphNode {
-        /**
-         * @param {import("@lerna/package").Package} pkg
-         */
-        constructor(pkg: any);
         name: any;
-        /** @type {Map<string, import("npm-package-arg").Result>} */
-        externalDependencies: Map<string, any>;
-        /** @type {Map<string, import("npm-package-arg").Result>} */
-        localDependencies: Map<string, any>;
-        /** @type {Map<string, PackageGraphNode>} */
+        externalDependencies: Map<string, import('npm-package-arg').Result>;
+        localDependencies: Map<string, import('npm-package-arg').Result>;
         localDependents: Map<string, PackageGraphNode>;
+        [PKG]: import('@lerna/package').Package;
+        constructor(pkg: any);
         get location(): any;
         get pkg(): any;
         get prereleaseId(): any;
@@ -32,7 +27,6 @@ declare module '@lerna/package-graph' {
          * @returns {String}
          */
         toString(): string;
-        [PKG]: any;
     }
     const PKG: unique symbol;
 

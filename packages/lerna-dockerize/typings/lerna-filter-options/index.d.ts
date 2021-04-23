@@ -7,7 +7,11 @@ declare module '@lerna/filter-options' {
      * @param {Partial<FilterOptions>} opts
      * @returns {Promise<import("@lerna/package").Package[]>}
      */
-    export function getFilteredPackages(packageGraph: import("@lerna/package-graph").PackageGraph, execOpts: import("@lerna/child-process").ExecOpts, opts: Partial<FilterOptions>): Promise<import("@lerna/package").Package[]>;
+    export function getFilteredPackages(
+        packageGraph: import('@lerna/package-graph').PackageGraph,
+        execOpts: import('@lerna/child-process').ExecOpts,
+        opts: Partial<FilterOptions>,
+    ): Promise<import('@lerna/package').Package[]>;
 
     /**
      * @typedef {object} FilterOptions

@@ -11,8 +11,12 @@ declare module '@lerna/run-topologically' {
      * @param {TopologicalConfig} [options]
      * @returns {Promise<T[]>} when all executions complete
      */
-    export function runTopologically<T>(packages: import("@lerna/package").Package[], runner: (pkg: import("@lerna/package").Package) => Promise<T>, { concurrency, graphType, rejectCycles }?: TopologicalConfig): Promise<T[]>;
-    export type TopologicalConfig = import("@lerna/query-graph").QueryGraphConfig & {
+    export function runTopologically<T>(
+        packages: import('@lerna/package').Package[],
+        runner: (pkg: import('@lerna/package').Package) => Promise<T>,
+        { concurrency, graphType, rejectCycles }?: TopologicalConfig,
+    ): Promise<T[]>;
+    export type TopologicalConfig = import('@lerna/query-graph').QueryGraphConfig & {
         concurrency: number;
     };
 

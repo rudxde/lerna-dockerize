@@ -26,7 +26,7 @@ export async function readDockerfile(path: string): Promise<DockerStage[]> {
     return result;
 }
 
-export function readStage(steps: string[], startIndex: number): { stage: DockerStage, endIndex: number } | undefined {
+export function readStage(steps: string[], startIndex: number): { stage: DockerStage; endIndex: number } | undefined {
     let i = startIndex;
     let baseImage;
     let stageName;
@@ -65,8 +65,8 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             stepsBeforeInstall,
             stepsAfterInstall,
             hasInstall: installHit,
-        }
-    }
+        },
+    };
 }
 
 export function splitInSteps(content: string): string[] {

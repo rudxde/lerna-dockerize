@@ -4,13 +4,19 @@ import { runTopologically } from '@lerna/run-topologically';
 import { Package } from './package';
 import { DockerStage } from './read-dockerfile';
 
-export async function irrerateDependencies(lernaPackages: lernaPackage[], packageGraph: PackageGraph, concurrency: number, rejectCycles?: boolean, defaultDockerFile?: DockerStage[]): Promise<Package[]> {
+export async function irrerateDependencies(
+    lernaPackages: lernaPackage[],
+    packageGraph: PackageGraph,
+    concurrency: number,
+    rejectCycles?: boolean,
+    defaultDockerFile?: DockerStage[],
+): Promise<Package[]> {
     const packages: Package[] = [];
     await runTopologically(
         lernaPackages,
         async (lernaPackage) => {
             const packageGraphNode = packageGraph.get(lernaPackage.name);
-            if(!packageGraphNode) {
+            if (!packageGraphNode) {
                 throw new Error(`Package ${lernaPackage.name} missing in packageGraph`);
             }
             const pkg = new Package(lernaPackage.name, lernaPackage, packageGraphNode);
@@ -20,7 +26,7 @@ export async function irrerateDependencies(lernaPackages: lernaPackage[], packag
         {
             concurrency: concurrency,
             rejectCycles: rejectCycles,
-        }
+        },
     );
     return packages;
 }
