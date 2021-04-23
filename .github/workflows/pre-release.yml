@@ -27,6 +27,36 @@ jobs:
           name: update-version
           path: ./
 
+  lint:
+    needs: update-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - uses: actions/download-artifact@v1
+        with:
+          name: update-version
+          path: ./
+      - run: npm ci
+      - run: npm run bootstrap
+      - run: npm run lint
+
+  test:
+    needs: update-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - uses: actions/download-artifact@v1
+        with:
+          name: update-version
+          path: ./
+      - run: npm ci
+      - run: npm run bootstrap
+      - run: npm run test
+
   build:
     needs: update-version
     runs-on: ubuntu-latest
@@ -52,7 +82,10 @@ jobs:
           path: ./
 
   publish-npm:
-    needs: build
+    needs:
+      - lint
+      - test
+      - build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v1
