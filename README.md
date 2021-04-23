@@ -68,4 +68,26 @@ and run it:
 npm run lerna-dockerize
 ```
 
+### npx
+
+or run it over npx:
+```
+npx lerna-dockerize
+```
+
+
 This will output an Dockerfile in your projects root.
+
+
+## Docker file syntax extension
+
+lerna-dockerize adds an flag to the Dockerfile syntax, which you can optionally use.
+
+### --if-exists
+The ```--if-exists``` flag can be added to docker ```RUN``` statements with an npm script and ```COPY``` without a ```--from``` flag statements.
+
+At ```RUN --if-exists npm run <script>``` lerna-dockerize will look if the script exists for an package. If not, the command will be ignored.
+
+The ```COPY --if-exists <source>... <dest>``` will look for each source if it exists and will remove missing files from the ```COPY``` command. If none of the files exists the command will be ignored.
+
+ 
