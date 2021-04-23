@@ -1,9 +1,9 @@
 {
   "name": "lerna-dockerize",
   "version": "0.0.0",
-  "description": "",
-  "main": "index",
-  "types": "index",
+  "description": "A dockerfile generator for lerna projects",
+  "main": "dist/index",
+  "types": "dist/index",
   "scripts": {
     "build": "tsc -p .",
     "build:prod": "npm run build",
@@ -13,8 +13,9 @@
     "lint": "eslint -c .eslintrc.js --ext .ts ."
   },
   "author": "rudxde",
-  "repository": "",
-  "bugs": "",
+  "homepage": "https://github.com/rudxde/lerna-dockerize",
+  "repository": "https://github.com/rudxde/lerna-dockerize",
+  "bugs": "https://github.com/rudxde/lerna-dockerize",
   "bin": {
     "lerna-dockerize": "./bin.js"
   },
@@ -38,6 +39,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "license": "Apache-2.0"
 }
