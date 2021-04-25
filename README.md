@@ -86,7 +86,11 @@ lerna-dockerize adds an flag to the Dockerfile syntax, which you can optionally 
 ### --if-exists
 The ```--if-exists``` flag can be added to docker ```RUN``` statements with an npm script and ```COPY``` without a ```--from``` flag statements.
 
-At ```RUN --if-exists npm run <script>``` lerna-dockerize will look if the script exists for an package. If not, the command will be ignored.
+At ```RUN --if-exists ./<local file>``` lerna-dockerize will look if the executable exists inside the package. If not, the command will be ignored.
+
+_Important: lerna-dockerize doesn't check if the file is inside the container. The RUN will be executed also if the file exists only locally._
+
+For ```RUN --if-exists npm run <script>``` lerna-dockerize will look if the npm script exists for an package. If not, the command will be ignored.
 
 The ```COPY --if-exists <source>... <dest>``` will look for each source if it exists and will remove missing files from the ```COPY``` command. If none of the files exists the command will be ignored.
 

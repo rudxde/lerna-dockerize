@@ -49,5 +49,8 @@ function applyExtendetDockerSyntaxRun(step: string, pkg: Package): string | unde
     if (ifExists && command.startsWith('npm run') && !pkg.lernaPackage.scripts[commandTokens[3]]) {
         return;
     }
+    if (ifExists && command.startsWith('./') && !existsSync(joinPath(pkg.relativePath, command.split(' ')[0]))) {
+        return;
+    }
     return `RUN ${command}`;
 }
