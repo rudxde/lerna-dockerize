@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/rudxde/lerna-dockerize/compare/v0.1.0...v0.2.0) (2021-04-25)
+
+
+### Features
+
+* add dockerfileWorkingDir option ([f237a16](https://github.com/rudxde/lerna-dockerize/commit/f237a16bc7f66b6882862ed7a2c293c4f77c6901))
+* add lernaCommand option ([b8bdd51](https://github.com/rudxde/lerna-dockerize/commit/b8bdd5163ede77e10d73f0dabee1af882a87de31))
+* add outDockerfileName option ([c875f9a](https://github.com/rudxde/lerna-dockerize/commit/c875f9a970c8ddc9375ac2208117b6f900ccd1bb))
+* add support for yarn install ([e89ecc6](https://github.com/rudxde/lerna-dockerize/commit/e89ecc6b12b7f3e7551df835e245f1a8c81fb6c7))
+* setup yargs and add base and template dockerfile option ([8df310a](https://github.com/rudxde/lerna-dockerize/commit/8df310a82b973e2cf2a6723a5b13350520994e97))
+
+
+
+
+
 # 0.1.0 (2021-04-23)
 
 
