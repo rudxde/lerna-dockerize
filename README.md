@@ -59,7 +59,7 @@ add a npm script to your package.json:
 ```
 {
     "scripts": {
-        "lerna-dockerize": "lerna-dockerize",
+        "lerna-dockerize": "lerna-dockerize --template-dockerfile-name Dockerfile.template",
     }
 }
 ```
@@ -72,7 +72,7 @@ npm run lerna-dockerize
 
 or run it over npx:
 ```
-npx lerna-dockerize
+npx lerna-dockerize --template-dockerfile-name Dockerfile.template
 ```
 
 

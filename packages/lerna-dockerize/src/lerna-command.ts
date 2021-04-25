@@ -3,6 +3,7 @@ import { getFilteredPackages } from '@lerna/filter-options';
 import { Package } from '@lerna/package';
 import { promises } from 'fs';
 import { irrerateDependencies } from './itterate-dependencies';
+import { getOptions } from './options';
 import { PackageMap } from './package';
 import { readDockerfile } from './read-dockerfile';
 
@@ -16,10 +17,13 @@ export class Dockerize extends Command {
         this.filteredPackages = await getFilteredPackages(this.packageGraph, this.execOpts, this.options);
     }
     async execute(): Promise<void> {
-        const baseDockerFileName = 'Dockerfile.base';
-        const templateDockerFileName = 'Dockerfile.template';
-        const baseDockerFile = await readDockerfile(baseDockerFileName);
-        const defaultDockerFile = await readDockerfile(templateDockerFileName);
+        const baseDockerFile = await readDockerfile(getOptions().baseDockerfileName);
+        const templateDockerFileName = getOptions().templateDockerfileName;
+        let defaultDockerFile = undefined;
+        if (templateDockerFileName) {
+            defaultDockerFile = await readDockerfile(templateDockerFileName);
+        }
+
         const baseStage = baseDockerFile[baseDockerFile.length - 1];
         baseStage.name = 'base';
 
@@ -43,14 +47,13 @@ export class Dockerize extends Command {
             const finalPackageDockerfile = await pkg.getFinalizedBuildStages(packageMap);
             result.push(...finalPackageDockerfile);
         }
-        
+
         // finalStage
         result.push(`# final stage`);
         result.push(`FROM ${baseStage.name}`);
         for (let pkg of packages) {
             result.push(`COPY --from=${pkg.getBuildStageName()} ${pkg.dockerWorkingDir} ${pkg.dockerWorkingDir}`);
         }
-        // console.log(result.join('\n'));
         await promises.writeFile('Dockerfile', result.join('\n'));
     }
 }
