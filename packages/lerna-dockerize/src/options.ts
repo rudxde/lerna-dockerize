@@ -3,6 +3,7 @@ import yargs from 'yargs';
 export interface IOptions {
     baseDockerfileName: string;
     templateDockerfileName?: string;
+    outDockerfileName: string;
     dockerfileWorkingDir: string;
 }
 
@@ -19,6 +20,11 @@ export function loadOptions(): IOptions {
         .option('templateDockerfileName', {
             description: 'The name of the Dockerfile template for all packages.',
             type: 'string',
+        })
+        .option('outDockerfileName', {
+            description: 'Name for where output Dockerfile should be stored.',
+            type: 'string',
+            default: 'Dockerfile',
         })
         .option('dockerfileWorkingDir', {
             description: 'The root working directory for the created dockerfile',

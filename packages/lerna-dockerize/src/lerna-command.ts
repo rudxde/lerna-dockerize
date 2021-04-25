@@ -54,6 +54,6 @@ export class Dockerize extends Command {
         for (let pkg of packages) {
             result.push(`COPY --from=${pkg.getBuildStageName()} ${pkg.dockerWorkingDir} ${pkg.dockerWorkingDir}`);
         }
-        await promises.writeFile('Dockerfile', result.join('\n'));
+        await promises.writeFile(getOptions().outDockerfileName, result.join('\n'));
     }
 }
