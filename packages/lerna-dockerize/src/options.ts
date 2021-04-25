@@ -6,6 +6,7 @@ export interface IOptions {
     outDockerfileName: string;
     dockerfileWorkingDir: string;
     packageManager: string;
+    lernaCommand: string;
 }
 
 let options: IOptions | undefined;
@@ -37,6 +38,11 @@ export function loadOptions(): IOptions {
             type: 'string',
             default: 'npm',
             choices: ['npm', 'yarn'],
+        })
+        .option('lernaCommand', {
+            description: 'The command used to call lerna inside the Dockerfile.',
+            type: 'string',
+            default: 'npx lerna',
         })
         .argv;
     return options;

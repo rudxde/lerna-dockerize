@@ -106,7 +106,7 @@ export class Package {
                 dependencyCopyContent.push(`COPY --from=${fromStageName} ${dependencyWorkingDir}/ ${dependencyWorkingDir}/`);
             }
 
-            result.push(`RUN npx lerna bootstrap --scope=${this.name} --includeDependencies`);
+            result.push(`RUN ${getOptions().lernaCommand} bootstrap --scope=${this.name} --includeDependencies`);
 
             result.push(...dependencyCopyContent);
 
