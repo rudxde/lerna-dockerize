@@ -5,6 +5,7 @@ import { promises, existsSync } from 'fs';
 import { join as joinPath, relative } from 'path';
 import { getDependenciesTransitive } from './get-dependencies-transitive';
 import { normalizePath } from './normalize-path';
+import { getOptions } from './options';
 
 export type PackageMap = Map<string, Package>;
 
@@ -53,7 +54,7 @@ export class Package {
         return normalizePath(relative(this.lernaPackage.rootPath, this.lernaPackage.location));
     }
     get dockerWorkingDir(): string {
-        return '/app/' + this.relativePath;
+        return getOptions().dockerfileWorkingDir + this.relativePath;
     }
 
     getPackageStageNamePrefix(): string {
@@ -84,7 +85,7 @@ export class Package {
             if (!stage.hasInstall) {
                 continue;
             }
-            result.push(`WORKDIR /app/`);
+            result.push(`WORKDIR ${getOptions().dockerfileWorkingDir}`);
 
             const dependencyCopyContent = [];
 
