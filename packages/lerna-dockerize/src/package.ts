@@ -6,6 +6,7 @@ import { join as joinPath, relative } from 'path';
 import { getDependenciesTransitive } from './get-dependencies-transitive';
 import { normalizePath } from './normalize-path';
 import { getOptions } from './options';
+import { applyExtendetDockerSyntax } from './extendet-docker-syntax';
 
 export type PackageMap = Map<string, Package>;
 
@@ -81,7 +82,7 @@ export class Package {
             }
             result.push(`FROM ${baseImage} as ${stage.name!}`);
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...this.fixStepsPaths(stage.stepsBeforeInstall));
+            result.push(...applyExtendetDockerSyntax(stage.stepsBeforeInstall, this));
             if (!stage.hasInstall) {
                 continue;
             }
@@ -111,7 +112,7 @@ export class Package {
             result.push(...dependencyCopyContent);
 
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...this.fixStepsPaths(stage.stepsAfterInstall));
+            result.push(...applyExtendetDockerSyntax(stage.stepsAfterInstall, this));
         }
         return result;
     }
@@ -128,48 +129,5 @@ export class Package {
     }
 
 
-    private fixStepsPaths(steps: string[]): string[] {
-        const result: string[] = [];
-        const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists)?(.*)\s+(.*)/;
-        const isRun = /RUN( --if-exists)? (.+)/;
 
-        for (let step of steps) {
-            const isCopyMatch = step.match(isCopy);
-            if (isCopyMatch) {
-                const [_, fromStage, chown, ifExists, files, destination] = isCopyMatch;
-                if (fromStage) {
-                    const [_, fromStageName] = fromStage.match(/--from=(\S*)/) ?? [];
-                    const isLocalStage = this.dockerFile!.find(x => x.originalName === fromStageName);
-                    if (isLocalStage) {
-                        result.push(`COPY --from=${isLocalStage.name} ${chown || ''} ${files} ${destination}`);
-                    } else {
-                        result.push(step);
-                    }
-                    continue;
-                }
-                const fixedFilePaths = files
-                    .split(' ')
-                    .map(file => normalizePath(joinPath(this.relativePath, file)))
-                    .filter(file => !ifExists || existsSync(file))
-                    .join(' ');
-                if (fixedFilePaths === '') {
-                    continue;
-                }
-                result.push(`COPY ${chown || ''} ${fixedFilePaths} ${destination}`);
-                continue;
-            }
-            const isRunMatch = step.match(isRun);
-            if (isRunMatch) {
-                const [_, ifExists, command] = isRunMatch;
-                const commandTokens = command.split(' ');
-                if (ifExists && command.startsWith('npm run') && !this.lernaPackage.scripts[commandTokens[3]]) {
-                    continue;
-                }
-                result.push(`RUN ${command}`);
-                continue;
-            }
-            result.push(step);
-        }
-        return result;
-    }
 }
