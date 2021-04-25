@@ -5,6 +5,7 @@ export interface IOptions {
     templateDockerfileName?: string;
     outDockerfileName: string;
     dockerfileWorkingDir: string;
+    packageManager: string;
 }
 
 let options: IOptions | undefined;
@@ -30,6 +31,12 @@ export function loadOptions(): IOptions {
             description: 'The root working directory for the created dockerfile',
             type: 'string',
             default: '/app/',
+        })
+        .option('packageManager', {
+            description: 'The package manager used by the project.',
+            type: 'string',
+            default: 'npm',
+            choices: ['npm', 'yarn'],
         })
         .argv;
     return options;

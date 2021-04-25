@@ -51,7 +51,7 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             i--;
             break;
         }
-        if (steps[i].match(/RUN npm (i|install)/)) {
+        if (steps[i].match(/RUN (npm|yarn) (i|install)/)) {
             installHit = true;
             continue;
         }

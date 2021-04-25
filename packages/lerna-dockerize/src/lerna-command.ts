@@ -32,7 +32,7 @@ export class Dockerize extends Command {
             result.push(`FROM ${baseStage.baseImage} as ${baseStage.name!}`);
             result.push(...baseStage.stepsBeforeInstall);
             if (baseStage.hasInstall) {
-                result.push(`RUN npm install`);
+                result.push(`RUN ${getOptions().packageManager} install`);
                 result.push(...baseStage.stepsAfterInstall);
             }
         }

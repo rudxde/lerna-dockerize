@@ -37,6 +37,23 @@ describe('readDockerfile', () => {
             }]);
         });
 
+        it('should return one stage from dockerfile with yarn install', async function (this: ReadDockerfileThisContext) {
+            this.fsReadFile.and.resolveTo([
+                'FROM nginx:latest',
+                'COPY ./file ./somewhere',
+                'RUN yarn i',
+                'RUN npm run prepare',
+            ].join('\n'));
+            const result = await readDockerfile('Dockerfile');
+            expect(result).toEqual([{
+                baseImage: 'nginx:latest',
+                name: undefined,
+                stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                stepsAfterInstall: ['RUN npm run prepare'],
+                hasInstall: true,
+            }]);
+        });
+
         it('should return multiple stages from dockerfile', async function (this: ReadDockerfileThisContext) {
             this.fsReadFile.and.resolveTo([
                 'FROM node:14 as build',
