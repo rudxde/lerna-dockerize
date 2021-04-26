@@ -23,6 +23,9 @@ export async function readDockerfile(path: string): Promise<DockerStage[]> {
         currentStep = readStageResult.endIndex + 1;
         result.push(readStageResult.stage);
     }
+    if (result.length === 0) {
+        console.warn(`The dockerfile '${path}' appears to be empty.`);
+    }
     return result;
 }
 
