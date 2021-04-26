@@ -3,6 +3,7 @@ import yargs from 'yargs';
 export interface IOptions {
     baseDockerfileName: string;
     templateDockerfileName?: string;
+    finalDockerfileName?: string;
     outDockerfileName: string;
     dockerfileWorkingDir: string;
     packageManager: string;
@@ -21,6 +22,10 @@ export function loadOptions(): IOptions {
         })
         .option('templateDockerfileName', {
             description: 'The name of the Dockerfile template for all packages.',
+            type: 'string',
+        })
+        .option('finalDockerfileName', {
+            description: 'The name for the final stages Dockerfile.',
             type: 'string',
         })
         .option('outDockerfileName', {

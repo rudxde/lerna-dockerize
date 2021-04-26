@@ -1,14 +1,14 @@
 import { Command } from '@lerna/command';
 import { getFilteredPackages } from '@lerna/filter-options';
-import { Package } from '@lerna/package';
+import { Package as LernaPackage } from '@lerna/package';
 import { promises } from 'fs';
 import { irrerateDependencies } from './itterate-dependencies';
 import { getOptions } from './options';
-import { PackageMap } from './package';
-import { readDockerfile } from './read-dockerfile';
+import { Package, PackageMap } from './package';
+import { DockerStage, readDockerfile } from './read-dockerfile';
 
 export class Dockerize extends Command {
-    filteredPackages: Package[] = [];
+    filteredPackages: LernaPackage[] = [];
 
     get requiresGit(): boolean {
         return false;
@@ -49,11 +49,39 @@ export class Dockerize extends Command {
         }
 
         // finalStage
-        result.push(`# final stage`);
-        result.push(`FROM ${baseStage.name}`);
-        for (let pkg of packages) {
-            result.push(`COPY --from=${pkg.getBuildStageName()} ${pkg.dockerWorkingDir} ${pkg.dockerWorkingDir}`);
-        }
+        result.push(...(await this.createFinalStage(baseStage, packages)));
         await promises.writeFile(getOptions().outDockerfileName, result.join('\n'));
+    }
+
+    private async createFinalStage(baseStage: DockerStage, packages: Package[]): Promise<string[]> {
+        const result: string[] = [];
+        result.push(`# final stage`);
+
+        const finalDockerfileName = getOptions().finalDockerfileName;
+        let finalStages: DockerStage[] = [
+            {
+                baseImage: baseStage.name!,
+                hasInstall: true,
+                stepsAfterInstall: [],
+                stepsBeforeInstall: [],
+            },
+        ];
+
+        // overwrite final docker stage
+        if (finalDockerfileName) {
+            finalStages = await readDockerfile(finalDockerfileName);
+        }
+
+        for (let finalStage of finalStages) {
+            result.push(`FROM ${finalStage.baseImage}${finalStage.name ? (' as ' + finalStage.name) : ''}`);
+            result.push(...finalStage.stepsBeforeInstall);
+            if (finalStage.hasInstall) {
+                for (let pkg of packages) {
+                    result.push(`COPY --from=${pkg.getBuildStageName()} ${pkg.dockerWorkingDir} ${pkg.dockerWorkingDir}`);
+                }
+            }
+            result.push(...finalStage.stepsAfterInstall);
+        }
+        return result;
     }
 }
