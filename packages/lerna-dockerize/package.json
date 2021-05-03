@@ -24,7 +24,7 @@
     "@lerna/filter-options": "^4.0.0",
     "@lerna/project": "^4.0.0",
     "@lerna/run-topologically": "^4.0.0",
-    "yargs": "^16.2.0"
+    "yargs": "^17.0.0"
   },
   "devDependencies": {
     "@types/jasmine": "^3.6.9",
