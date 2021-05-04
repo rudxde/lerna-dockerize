@@ -48,8 +48,8 @@ function applyExtendetDockerSyntaxCopy(step: string, pkg: Package): string | und
 function applyExtendetDockerSyntaxRun(step: string, pkg: Package): string | undefined {
     const [_, ifExists, command] = step.match(isRun)!;
     const commandTokens = command.split(' ');
-    if (ifExists && command.startsWith('npm run') && !pkg.lernaPackage.scripts[commandTokens[3]]) {
-        getLogger().debug(`The npm run command '${commandTokens[3]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
+    if (ifExists && command.startsWith('npm run') && !pkg.lernaPackage.scripts[commandTokens[2]]) {
+        getLogger().debug(`The npm run command '${commandTokens[2]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
         return;
     }
     if (ifExists && command.startsWith('./') && !existsSync(joinPath(pkg.relativePath, command.split(' ')[0]))) {
