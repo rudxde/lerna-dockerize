@@ -2,6 +2,11 @@
   "name": "lerna-dockerize",
   "version": "0.2.0",
   "description": "A dockerfile generator for lerna projects",
+  "keywords": [
+    "lerna",
+    "docker",
+    "monorepo"
+  ],
   "main": "dist/index",
   "types": "dist/index",
   "scripts": {
