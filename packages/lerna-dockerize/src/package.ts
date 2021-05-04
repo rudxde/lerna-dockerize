@@ -108,7 +108,14 @@ export class Package {
                 dependencyCopyContent.push(`COPY --from=${fromStageName} ${dependencyWorkingDir}/ ${dependencyWorkingDir}/`);
             }
 
-            result.push(`RUN ${getOptions().lernaCommand} bootstrap --scope=${this.name} --includeDependencies`);
+            result.push([
+                'RUN',
+                getOptions().lernaCommand,
+                'bootstrap',
+                ...(getOptions().hoist ? ['--hoist'] : []),
+                `--scope=${this.name}`,
+                '--includeDependencies',
+            ].join(' '));
 
             result.push(...dependencyCopyContent);
 
