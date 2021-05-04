@@ -1,4 +1,5 @@
 import { Dockerize } from './lerna-command';
+import { getLogger } from './logger';
 import { loadOptions } from './options';
 
 
@@ -9,6 +10,6 @@ async function main(): Promise<void> {
 
 main()
     .catch(err => {
-        console.error(err);
+        getLogger().error(err);
         process.exit(1);
     });

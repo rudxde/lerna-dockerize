@@ -1,6 +1,8 @@
 import 'jasmine';
 import { promises } from 'fs';
 import { readStage, splitInSteps, readDockerfile } from '../src/read-dockerfile';
+import { loadOptions } from '../src/options';
+import { getLogger } from '../src/logger';
 
 interface ReadDockerfileThisContext {
     fsReadFile: jasmine.Spy<typeof promises.readFile>;
@@ -10,13 +12,20 @@ describe('readDockerfile', () => {
 
     describe('readDockerfile', () => {
 
+        beforeAll(async () => {
+            await loadOptions([]);
+        });
+
         beforeEach(function (this: ReadDockerfileThisContext) {
             this.fsReadFile = spyOn(promises, 'readFile');
         });
 
         it('should return no stages if file is empty', async function (this: ReadDockerfileThisContext) {
             this.fsReadFile.and.resolveTo('');
+            const oldLogLevel = getLogger().level;
+            getLogger().level = 'error';
             const result = await readDockerfile('Dockerfile');
+            getLogger().level = oldLogLevel;
             expect(result).toEqual([]);
         });
 

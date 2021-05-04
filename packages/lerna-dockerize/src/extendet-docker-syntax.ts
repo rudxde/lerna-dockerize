@@ -2,6 +2,7 @@ import { Package } from './package';
 import { join as joinPath } from 'path';
 import { existsSync } from 'fs';
 import { normalizePath } from './normalize-path';
+import { getLogger } from './logger';
 
 const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists)?(.*)\s+(.*)/;
 const isRun = /RUN( --if-exists)? (.+)/;
@@ -38,6 +39,7 @@ function applyExtendetDockerSyntaxCopy(step: string, pkg: Package): string | und
         .filter(file => !ifExists || existsSync(file))
         .join(' ');
     if (fixedFilePaths === '') {
+        getLogger().debug(`None of the files '${files}' was found in the package '${pkg.name}'. Ignoring COPY due set '--if-exists' flag.`);
         return;
     }
     return `COPY ${chown || ''} ${fixedFilePaths} ${destination}`;
@@ -47,9 +49,11 @@ function applyExtendetDockerSyntaxRun(step: string, pkg: Package): string | unde
     const [_, ifExists, command] = step.match(isRun)!;
     const commandTokens = command.split(' ');
     if (ifExists && command.startsWith('npm run') && !pkg.lernaPackage.scripts[commandTokens[3]]) {
+        getLogger().debug(`The npm run command '${commandTokens[3]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
         return;
     }
     if (ifExists && command.startsWith('./') && !existsSync(joinPath(pkg.relativePath, command.split(' ')[0]))) {
+        getLogger().debug(`The shell command '${command.split(' ')[0]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
         return;
     }
     return `RUN ${command}`;

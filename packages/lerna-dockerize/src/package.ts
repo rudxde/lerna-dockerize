@@ -7,6 +7,7 @@ import { getDependenciesTransitive } from './get-dependencies-transitive';
 import { normalizePath } from './normalize-path';
 import { getOptions } from './options';
 import { applyExtendetDockerSyntax } from './extendet-docker-syntax';
+import { getLogger } from './logger';
 
 export type PackageMap = Map<string, Package>;
 
@@ -26,7 +27,7 @@ export class Package {
             throw new Error(`The lerna package is missing for the dependency ${this.name}`);
         }
         const files = await promises.readdir(this.lernaPackage.location);
-        // console.log(files);
+        getLogger().debug(`the package ${this.name} contains the following files: ${files.join(', ')}`);
         for (let file of files) {
             if (file.toLowerCase() === 'dockerfile') {
                 return joinPath(this.lernaPackage.location, file);
@@ -41,10 +42,10 @@ export class Package {
             throw new Error(`No Dockerfile for the package ${this.name} and no default docker file was found!`);
         }
         if (!dockerFileName) {
-            console.log(`using default dockerfile for package ${this.name}`);
+            getLogger().info(`using default dockerfile for package ${this.name}`);
             this.dockerFile = defaultDockerFile!;
         } else {
-            console.log(`using custom dockerfile for package ${this.name}`);
+            getLogger().info(`using custom dockerfile for package ${this.name}`);
             this.dockerFile = await readDockerfile(dockerFileName);
         }
         this.dockerFile = this.dockerFile!.map((stage, i) => this.scopeDockerStage(stage, i));

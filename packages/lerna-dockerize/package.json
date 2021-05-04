@@ -24,6 +24,8 @@
     "@lerna/filter-options": "^4.0.0",
     "@lerna/project": "^4.0.0",
     "@lerna/run-topologically": "^4.0.0",
+    "logform": "^2.2.0",
+    "winston": "^3.3.3",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

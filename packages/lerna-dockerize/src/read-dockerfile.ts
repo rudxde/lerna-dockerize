@@ -1,4 +1,5 @@
 import { promises } from 'fs';
+import { getLogger } from './logger';
 
 export interface DockerStage {
     baseImage: string;
@@ -24,7 +25,7 @@ export async function readDockerfile(path: string): Promise<DockerStage[]> {
         result.push(readStageResult.stage);
     }
     if (result.length === 0) {
-        console.warn(`The dockerfile '${path}' appears to be empty.`);
+        getLogger().warn(`The dockerfile '${path}' appears to be empty.`);
     }
     return result;
 }

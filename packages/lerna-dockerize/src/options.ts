@@ -8,12 +8,14 @@ export interface IOptions {
     dockerfileWorkingDir: string;
     packageManager: string;
     lernaCommand: string;
+    logLevel: string;
+    logConsole: boolean;
 }
 
 let options: IOptions | undefined;
 
 
-export function loadOptions(): IOptions {
+export function loadOptions(args: string[] = process.argv): IOptions {
     options = yargs
         .option('baseDockerfileName', {
             description: 'The name of the base Dockerfile.',
@@ -49,7 +51,18 @@ export function loadOptions(): IOptions {
             type: 'string',
             default: 'npx lerna',
         })
-        .argv;
+        .option('logLevel', {
+            description: 'The level which should be logged.',
+            type: 'string',
+            default: 'info',
+            choices: ['info', 'error', 'debug', 'warn'],
+        })
+        .option('logConsole', {
+            description: 'Should be logged to the console',
+            type: 'boolean',
+            default: true,
+        })
+        .parse(args);
     return options;
 }
 

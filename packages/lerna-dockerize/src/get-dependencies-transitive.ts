@@ -1,10 +1,11 @@
+import { getLogger } from './logger';
 import { PackageMap } from './package';
 
 function getDependenciesRecursive(dependenciesFrom: string, packageMap: PackageMap): string[] {
     let result: string[] = [];
     const packageGraphNode = packageMap.get(dependenciesFrom);
     if (!packageGraphNode) {
-        console.log(`Package ${dependenciesFrom} not found!`);
+        getLogger().warn(`Package ${dependenciesFrom} not found!`);
         return [];
     }
     for (let dependencyName of packageGraphNode.lernaPackageGraphNode.localDependencies.keys()) {
