@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/rudxde/lerna-dockerize/compare/v0.2.0...v0.3.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* right array index for extendet-docker-syntax if exists npm run ([15dafbe](https://github.com/rudxde/lerna-dockerize/commit/15dafbe0eaddfb30e701a019e2a93658216c9a97))
+
+
+### Features
+
+* add hoist option ([7520090](https://github.com/rudxde/lerna-dockerize/commit/7520090bfb45dadbdcb962219acc0583950d70a0))
+* add option to overwrite final stage ([12f527f](https://github.com/rudxde/lerna-dockerize/commit/12f527fc8103ba5e5f7105ff811bd3ea03e4c810))
+* add support for local scripts for RUN --if-exists ([00e70e8](https://github.com/rudxde/lerna-dockerize/commit/00e70e8bcfbae9db5497e7cc348d355add5da7c3))
+* add warning if Dockerfile was parsed as empty ([5f57510](https://github.com/rudxde/lerna-dockerize/commit/5f57510ba9dcc2d38f3210ec5fd633b6accba4bb))
+* set yargs help width to terminal width ([844876f](https://github.com/rudxde/lerna-dockerize/commit/844876f479635fb39b9add41df38726a711545f1))
+* setup logging ([4f52602](https://github.com/rudxde/lerna-dockerize/commit/4f52602645176aee798bb27ad7d3ddf5bf1f4061))
+
+
+
+
+
 # [0.2.0](https://github.com/rudxde/lerna-dockerize/compare/v0.1.0...v0.2.0) (2021-04-25)
 
 
