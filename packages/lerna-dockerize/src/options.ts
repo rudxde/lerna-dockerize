@@ -11,6 +11,7 @@ export interface IOptions {
     logLevel: string;
     logConsole: boolean;
     hoist: boolean;
+    addPrepareStages: boolean;
 }
 
 let options: IOptions | undefined;
@@ -66,6 +67,11 @@ export function loadOptions(args: string[] = process.argv): IOptions {
         })
         .option('hoist', {
             description: 'Should the --hoist option of lerna be used inside the generated dockerfile',
+            type: 'boolean',
+            default: false,
+        })
+        .option('addPrepareStages', {
+            description: 'Should stages be split into extra prepare stage.',
             type: 'boolean',
             default: false,
         })

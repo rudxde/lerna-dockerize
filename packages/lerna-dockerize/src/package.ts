@@ -63,6 +63,16 @@ export class Package {
         return this.name.replace(/@/gm, '').replace(/\//gm, '_');
     }
 
+    getPrepareStageName(): string | undefined {
+        if (!this.dockerFile) {
+            return undefined;
+        }
+        if (!getOptions().addPrepareStages) {
+            return this.getBuildStageName();
+        }
+        return this.dockerFile[this.dockerFile.length - 1].prepareStageName;
+    }
+
     getBuildStageName(): string | undefined {
         if (!this.dockerFile) {
             return undefined;
@@ -81,7 +91,11 @@ export class Package {
             if (baseImageIsLocalStage) {
                 baseImage = baseImageIsLocalStage.name!;
             }
-            result.push(`FROM ${baseImage} as ${stage.name!}`);
+            if (getOptions().addPrepareStages) {
+                result.push(`FROM ${baseImage} as ${stage.prepareStageName!}`);
+            } else {
+                result.push(`FROM ${baseImage} as ${stage.name!}`);
+            }
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
             result.push(...applyExtendetDockerSyntax(stage.stepsBeforeInstall, this));
             if (!stage.hasInstall) {
@@ -101,10 +115,11 @@ export class Package {
                 });
 
             for (let dependencyPackage of dependencyPackages) {
+                const fromPrepareStageName = dependencyPackage.getPrepareStageName();
                 const fromStageName = dependencyPackage.getBuildStageName();
                 const dependencyWorkingDir = dependencyPackage.dockerWorkingDir;
                 const packageJsonPath = normalizePath(joinPath(dependencyWorkingDir, 'package.json'));
-                result.push(`COPY --from=${fromStageName} ${packageJsonPath} ${dependencyWorkingDir}/`);
+                result.push(`COPY --from=${fromPrepareStageName} ${packageJsonPath} ${dependencyWorkingDir}/`);
                 dependencyCopyContent.push(`COPY --from=${fromStageName} ${dependencyWorkingDir}/ ${dependencyWorkingDir}/`);
             }
 
@@ -117,6 +132,10 @@ export class Package {
                 '--includeDependencies',
             ].join(' '));
 
+            if (getOptions().addPrepareStages) {
+                result.push(`FROM ${stage.prepareStageName!} as ${stage.name!}`);
+            }
+
             result.push(...dependencyCopyContent);
 
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
@@ -126,9 +145,11 @@ export class Package {
     }
 
     private scopeDockerStage(stage: DockerStage, stageNumber: number): DockerStage {
+        const stageName = this.getPackageStageNamePrefix() + '-' + (stage.name || stageNumber);
         return {
             baseImage: stage.baseImage,
-            name: this.getPackageStageNamePrefix() + '-' + (stage.name || stageNumber),
+            name: stageName,
+            prepareStageName: getOptions().addPrepareStages ? `${stageName}_prepare` : undefined,
             originalName: stage.name,
             stepsBeforeInstall: [...stage.stepsBeforeInstall],
             stepsAfterInstall: [...stage.stepsAfterInstall],

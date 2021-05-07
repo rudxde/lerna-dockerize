@@ -5,6 +5,7 @@ export interface DockerStage {
     baseImage: string;
     originalName?: string;
     name?: string;
+    prepareStageName?: string;
     stepsBeforeInstall: string[];
     stepsAfterInstall: string[];
     hasInstall: boolean;
