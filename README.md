@@ -94,4 +94,15 @@ For ```RUN --if-exists npm run <script>``` lerna-dockerize will look if the npm 
 
 The ```COPY --if-exists <source>... <dest>``` will look for each source if it exists and will remove missing files from the ```COPY``` command. If none of the files exists, the command will be ignored.
 
- 
+### --slim
+
+The --slim flag is used to slim down package.json files to the only required fields for installing dependencies. This makes development easier, so not every change to your package json files will trigger a new install inside the building docker container.
+
+just use the --slim flag inside the ```COPY``` statement:
+```
+COPY --slim ./package.json ./
+RUN npm install
+COPY ./package.json ./
+```
+
+> If you want to use --if-exists and --slim in parallel, the --if-exists needs to be written first.

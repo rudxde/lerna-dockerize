@@ -55,6 +55,7 @@ export class Package {
     get relativePath(): string {
         return normalizePath(relative(this.lernaPackage.rootPath, this.lernaPackage.location));
     }
+
     get dockerWorkingDir(): string {
         return getOptions().dockerfileWorkingDir + this.relativePath;
     }
@@ -97,7 +98,7 @@ export class Package {
                 result.push(`FROM ${baseImage} as ${stage.name!}`);
             }
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...applyExtendetDockerSyntax(stage.stepsBeforeInstall, this));
+            result.push(...(await applyExtendetDockerSyntax(stage.stepsBeforeInstall, this)));
             if (!stage.hasInstall) {
                 continue;
             }
@@ -139,7 +140,7 @@ export class Package {
             result.push(...dependencyCopyContent);
 
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...applyExtendetDockerSyntax(stage.stepsAfterInstall, this));
+            result.push(...(await applyExtendetDockerSyntax(stage.stepsAfterInstall, this)));
         }
         return result;
     }
