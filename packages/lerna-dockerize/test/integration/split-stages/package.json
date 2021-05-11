@@ -1,0 +1,11 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "dependencies": {
+        "lerna": "^4.0.0",
+        "lerna-dockerize": "latest"
+    },
+    "scripts": {
+        "lerna-dockerize": "lerna-dockerize --logLevel error --templateDockerfileName Dockerfile.template --addPrepareStages"
+    }
+}

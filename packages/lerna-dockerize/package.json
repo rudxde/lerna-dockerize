@@ -13,6 +13,7 @@
     "build": "tsc -p .",
     "build:prod": "npm run build",
     "publish:npm": "npm publish",
+    "pretest": "npm run build",
     "test": "ts-node -P ./tsconfig.test.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "test:coverage": "ts-node -P ./tsconfig.test.json node_modules/nyc/bin/nyc.js npm run test",
     "lint": "eslint -c .eslintrc.js --ext .ts ."

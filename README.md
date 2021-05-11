@@ -106,3 +106,7 @@ COPY ./package.json ./
 ```
 
 > If you want to use --if-exists and --slim in parallel, the --if-exists needs to be written first.
+
+## Examples
+
+Inside the [test/integration](./packages/lerna-dockerize/test/integration) folder are some example setups, where the expected outcome is named 'Dockerfile.expected'.

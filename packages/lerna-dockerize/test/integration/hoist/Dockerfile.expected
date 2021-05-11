@@ -1,0 +1,41 @@
+FROM node:16 as base
+COPY ./package.json ./
+RUN npm install
+# Package a
+FROM base as a-build
+WORKDIR /app/packages/a
+COPY  packages/a/package-slim.json package.json
+WORKDIR /app/
+RUN npx lerna bootstrap --hoist --scope=a --includeDependencies
+WORKDIR /app/packages/a
+COPY  packages/a/package.json ./
+RUN npm run build
+# Package b
+FROM base as b-build
+WORKDIR /app/packages/b
+COPY  packages/b/package-slim.json package.json
+WORKDIR /app/
+COPY --from=a-build /app/packages/a/package.json /app/packages/a/
+RUN npx lerna bootstrap --hoist --scope=b --includeDependencies
+COPY --from=a-build /app/packages/a/ /app/packages/a/
+WORKDIR /app/packages/b
+COPY  packages/b/package.json ./
+RUN npm run build
+# Package c
+FROM base as c-build
+WORKDIR /app/packages/c
+COPY  packages/c/package-slim.json package.json
+WORKDIR /app/
+COPY --from=b-build /app/packages/b/package.json /app/packages/b/
+COPY --from=a-build /app/packages/a/package.json /app/packages/a/
+RUN npx lerna bootstrap --hoist --scope=c --includeDependencies
+COPY --from=b-build /app/packages/b/ /app/packages/b/
+COPY --from=a-build /app/packages/a/ /app/packages/a/
+WORKDIR /app/packages/c
+COPY  packages/c/package.json ./
+RUN npm run build
+# final stage
+FROM base
+COPY --from=a-build /app/packages/a /app/packages/a
+COPY --from=b-build /app/packages/b /app/packages/b
+COPY --from=c-build /app/packages/c /app/packages/c
