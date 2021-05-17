@@ -1,6 +1,6 @@
 {
   "name": "lerna-dockerize",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A dockerfile generator for lerna projects",
   "keywords": [
     "lerna",

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/rudxde/lerna-dockerize/compare/v0.3.0...v0.4.0) (2021-05-17)
+
+
+### Features
+
+* add package.json slimming ([29d5a49](https://github.com/rudxde/lerna-dockerize/commit/29d5a49d2dc0b05891366893e6850e758a58c93f))
+* split stages into extra prepare stage ([e5dae45](https://github.com/rudxde/lerna-dockerize/commit/e5dae45a228a7b911f29986be0c75a9d4d75224c))
+
+
+
+
+
 # [0.3.0](https://github.com/rudxde/lerna-dockerize/compare/v0.2.0...v0.3.0) (2021-05-05)
 
 
