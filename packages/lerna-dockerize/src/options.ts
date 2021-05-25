@@ -17,8 +17,8 @@ export interface IOptions {
 let options: IOptions | undefined;
 
 
-export function loadOptions(args: string[] = process.argv): IOptions {
-    options = yargs
+export async function loadOptions(args: string[] = process.argv): Promise<IOptions> {
+    options = await yargs
         .wrap(process.stdout.columns)
         .option('baseDockerfileName', {
             description: 'The name of the base Dockerfile.',
