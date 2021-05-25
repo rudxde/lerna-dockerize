@@ -75,10 +75,14 @@ export class Package {
     }
 
     getBuildStageName(): string | undefined {
+        return this.getBuildStage()?.name;
+    }
+
+    getBuildStage(): DockerStage | undefined {
         if (!this.dockerFile) {
             return undefined;
         }
-        return this.dockerFile[this.dockerFile.length - 1].name;
+        return this.dockerFile[this.dockerFile.length - 1];
     }
 
     async getFinalizedBuildStages(packageMap: PackageMap): Promise<string[]> {
@@ -92,7 +96,8 @@ export class Package {
             if (baseImageIsLocalStage) {
                 baseImage = baseImageIsLocalStage.name!;
             }
-            if (getOptions().addPrepareStages) {
+            const addPrepareStage = getOptions().addPrepareStages && stage.hasInstall;
+            if (addPrepareStage) {
                 result.push(`FROM ${baseImage} as ${stage.prepareStageName!}`);
             } else {
                 result.push(`FROM ${baseImage} as ${stage.name!}`);
@@ -116,11 +121,11 @@ export class Package {
                 });
 
             for (let dependencyPackage of dependencyPackages) {
-                const fromPrepareStageName = dependencyPackage.getPrepareStageName();
                 const fromStageName = dependencyPackage.getBuildStageName();
+                const packageDataFromStageName = dependencyPackage.getBuildStage()?.hasInstall ? dependencyPackage.getPrepareStageName() : fromStageName;
                 const dependencyWorkingDir = dependencyPackage.dockerWorkingDir;
                 const packageJsonPath = normalizePath(joinPath(dependencyWorkingDir, 'package.json'));
-                result.push(`COPY --from=${fromPrepareStageName} ${packageJsonPath} ${dependencyWorkingDir}/`);
+                result.push(`COPY --from=${packageDataFromStageName} ${packageJsonPath} ${dependencyWorkingDir}/`);
                 dependencyCopyContent.push(`COPY --from=${fromStageName} ${dependencyWorkingDir}/ ${dependencyWorkingDir}/`);
             }
 
@@ -133,7 +138,7 @@ export class Package {
                 '--includeDependencies',
             ].join(' '));
 
-            if (getOptions().addPrepareStages) {
+            if (addPrepareStage) {
                 result.push(`FROM ${stage.prepareStageName!} as ${stage.name!}`);
             }
 
