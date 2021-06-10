@@ -12,7 +12,13 @@ It generates a multistage build Dockerfile, with stages for each package.
 npm i --save-dev lerna-dockerize
 ```
 
-## project setup
+
+## Examples
+
+Inside the [test/integration](./packages/lerna-dockerize/test/integration) folder are some example setups, where the expected outcome is named 'Dockerfile.expected'.
+
+
+## Project setup
 
 You will need at least two dockerfiles.
 
@@ -145,7 +151,3 @@ COPY ./package.json ./
 ```
 
 > If you want to use --if-exists and --slim in parallel, the --if-exists needs to be written first.
-
-## Examples
-
-Inside the [test/integration](./packages/lerna-dockerize/test/integration) folder are some example setups, where the expected outcome is named 'Dockerfile.expected'.
