@@ -1,4 +1,6 @@
+import { existsSync, promises } from 'fs';
 import yargs from 'yargs';
+import { getLogger } from './logger';
 
 export interface IOptions {
     baseDockerfileName: string;
@@ -18,7 +20,19 @@ let options: IOptions | undefined;
 
 
 export async function loadOptions(args: string[] = process.argv): Promise<IOptions> {
+    let config = {};
+    const lernaConfigPath = 'lerna.json';
+    try {
+        if (existsSync(lernaConfigPath)) {
+            const lernaConfigRaw = await (await promises.readFile(lernaConfigPath)).toString();
+            const lernaConfig = JSON.parse(lernaConfigRaw);
+            config = lernaConfig['lerna-dockerize'] ?? {};
+        }
+    } catch (err) {
+        getLogger().debug(err);
+    }
     options = await yargs
+        .config(config)
         .wrap(process.stdout.columns)
         .option('baseDockerfileName', {
             description: 'The name of the base Dockerfile.',

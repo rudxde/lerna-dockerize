@@ -80,6 +80,43 @@ npx lerna-dockerize --template-dockerfile-name Dockerfile.template
 
 This will output an Dockerfile in your projects root.
 
+## Configuration
+
+You can configure lerna dockerize over parameters or entries to the `lerna.json` file.  Each option can be set as command line parameter or key inside the config file inside the `lerna-dockerize` object.
+
+For example:
+`lerna.json`
+```
+{
+  "packages": [
+    "packages/*"
+  ],
+  "version": "1.0.0",
+  "lerna-dockerize": {
+    "logLevel": "error",
+    "templateDockerfileName": "Dockerfile.template"
+  }
+}
+```
+
+
+The following options do exists:
+
+| Option                 | cli parameter                    | description                                                              | details                                                                |
+|------------------------|----------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------|
+| baseDockerfileName     | --baseDockerfileName [value]     | The name of the base Dockerfile.                                         | [string] [default: "Dockerfile.base"]                                  |
+| templateDockerfileName | --templateDockerfileName [value] | The name of the Dockerfile template for all packages.                    | [string]                                                               |
+| finalDockerfileName    | --finalDockerfileName [value]    | The name for the final stages Dockerfile.                                | [string]                                                               |
+| outDockerfileName      | --outDockerfileName [value]      | Name for where output Dockerfile should be stored.                       | [string] [default: "Dockerfile"]                                       |
+| dockerfileWorkingDir   | --dockerfileWorkingDir [value]   | The root working directory for the created dockerfile                    | [string] [default: "/app/"]                                            |
+| packageManager         | --packageManager [value]         | The package manager used by the project.                                 | [string] [choices: "npm", "yarn"] [default: "npm"]                     |
+| lernaCommand           | --lernaCommand [value]           | The command used to call lerna inside the Dockerfile.                    | [string] [default: "npx lerna"]                                        |
+| logLevel               | --logLevel [value]               | The level which should be logged.                                        | [string] [choices: "info", "error", "debug", "warn"] [default: "info"] |
+| logConsole             | --no-logConsole                  | Should be logged to the console                                          | [boolean] [default: true]                                              |
+| hoist                  | --hoist                          | Should the hoist option of lerna be used inside the generated dockerfile | [boolean] [default: false]                                             |
+| addPrepareStages       | --addPrepareStages               | Should stages be split into extra prepare stage.                         | [boolean] [default: false]                                             |
+
+
 
 ## Dockerfile syntax extension
 
