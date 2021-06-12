@@ -46,6 +46,20 @@ describe('readDockerfile', () => {
             }]);
         });
 
+        it('should read stage with custom registry base image', async function (this: ReadDockerfileThisContext) {
+            this.fsReadFile.and.resolveTo([
+                'FROM some.registry.com/somewhere/something/nginx:latest',
+            ].join('\n'));
+            const result = await readDockerfile('Dockerfile');
+            expect(result).toEqual([{
+                baseImage: 'some.registry.com/somewhere/something/nginx:latest',
+                name: undefined,
+                stepsBeforeInstall: [],
+                stepsAfterInstall: [],
+                hasInstall: false,
+            }]);
+        });
+
         it('should return one stage from dockerfile with yarn install', async function (this: ReadDockerfileThisContext) {
             this.fsReadFile.and.resolveTo([
                 'FROM nginx:latest',

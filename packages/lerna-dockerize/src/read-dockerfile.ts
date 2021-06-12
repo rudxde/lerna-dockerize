@@ -35,7 +35,7 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
     let i = startIndex;
     let baseImage;
     let stageName;
-    const isStageFromClause = /(FROM|from) ([a-zA-Z0-9:_-]*)( as ([a-zA-Z0-9:_-]*))?/;
+    const isStageFromClause = /(FROM|from) ([a-zA-Z0-9:_\-@.\/]*)( as ([a-zA-Z0-9:_-]*))?/;
     for (; ; i++) {
         if (i >= steps.length) {
             return undefined;
