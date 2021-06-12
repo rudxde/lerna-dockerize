@@ -56,8 +56,9 @@ export class Dockerize extends Command {
                 result.push(...finalPackageDockerfile);
             }
 
-            // finalStage
-            result.push(...(await this.createFinalStage(baseStage, packages)));
+            if (getOptions().finalStage) {
+                result.push(...(await this.createFinalStage(baseStage, packages)));
+            }
             await promises.writeFile(getOptions().outDockerfileName, result.join('\n'));
         } catch (err) {
             getLogger().error(err);

@@ -5,6 +5,7 @@ import { getLogger } from './logger';
 export interface IOptions {
     baseDockerfileName: string;
     templateDockerfileName?: string;
+    finalStage: boolean;
     finalDockerfileName?: string;
     outDockerfileName: string;
     dockerfileWorkingDir: string;
@@ -43,10 +44,16 @@ export async function loadOptions(args: string[] = process.argv): Promise<IOptio
             description: 'The name of the Dockerfile template for all packages.',
             type: 'string',
         })
+        .option('finalStage', {
+            description: 'Should an final stage be added, which combines all packages.',
+            type: 'boolean',
+            default: true,
+        })
         .option('finalDockerfileName', {
-            description: 'The name for the final stages Dockerfile.',
+            description: 'Dockerfile-Name for custom final stages.',
             type: 'string',
         })
+        .implies('finalDockerfileName', 'finalStage')
         .option('outDockerfileName', {
             description: 'Name for where output Dockerfile should be stored.',
             type: 'string',

@@ -112,7 +112,8 @@ The following options do exists:
 |------------------------|----------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------|
 | baseDockerfileName     | --baseDockerfileName [value]     | The name of the base Dockerfile.                                         | [string] [default: "Dockerfile.base"]                                  |
 | templateDockerfileName | --templateDockerfileName [value] | The name of the Dockerfile template for all packages.                    | [string]                                                               |
-| finalDockerfileName    | --finalDockerfileName [value]    | The name for the final stages Dockerfile.                                | [string]                                                               |
+| finalStage             | --no-finalStage                  | Should an final stage be added, which combines all packages.             | [boolean] [default: true]                                                               |
+| finalDockerfileName    | --finalDockerfileName [value]    | Dockerfile-Name for custom final stages.                                 | [string]                                                               |
 | outDockerfileName      | --outDockerfileName [value]      | Name for where output Dockerfile should be stored.                       | [string] [default: "Dockerfile"]                                       |
 | dockerfileWorkingDir   | --dockerfileWorkingDir [value]   | The root working directory for the created dockerfile                    | [string] [default: "/app/"]                                            |
 | packageManager         | --packageManager [value]         | The package manager used by the project.                                 | [string] [choices: "npm", "yarn"] [default: "npm"]                     |
