@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/rudxde/lerna-dockerize/compare/v0.4.1...v0.5.0) (2021-06-12)
+
+
+### Bug Fixes
+
+* add support for custom registry and digest for images ([7e0486a](https://github.com/rudxde/lerna-dockerize/commit/7e0486a7fe1069a1ac2b0f376e5439f7b566315b)), closes [#53](https://github.com/rudxde/lerna-dockerize/issues/53)
+
+
+### Features
+
+* add finalStage option to enable or disable final stage generation ([1a57118](https://github.com/rudxde/lerna-dockerize/commit/1a57118d5f51002a40f06269bce6127742371ecc))
+* add possibility to set options in lerna.json ([efd6eaa](https://github.com/rudxde/lerna-dockerize/commit/efd6eaacea761c34966d766285a27563bb1de9d4))
+
+
+
+
+
 ## [0.4.1](https://github.com/rudxde/lerna-dockerize/compare/v0.4.0...v0.4.1) (2021-05-25)
 
 
