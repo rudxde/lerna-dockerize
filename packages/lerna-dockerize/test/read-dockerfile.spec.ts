@@ -42,7 +42,11 @@ describe('readDockerfile', () => {
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
-                hasInstall: true,
+                install: {
+                    ci: undefined,
+                    ignoreScripts: false,
+                    onlyProduction: false,
+                },
             }]);
         });
 
@@ -56,7 +60,7 @@ describe('readDockerfile', () => {
                 name: undefined,
                 stepsBeforeInstall: [],
                 stepsAfterInstall: [],
-                hasInstall: false,
+                install: undefined,
             }]);
         });
 
@@ -73,7 +77,53 @@ describe('readDockerfile', () => {
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
-                hasInstall: true,
+                install: {
+                    ci: undefined,
+                    ignoreScripts: false,
+                    onlyProduction: false,
+                },
+            }]);
+        });
+
+        it('should return one stage from dockerfile with install parameters', async function (this: ReadDockerfileThisContext) {
+            this.fsReadFile.and.resolveTo([
+                'FROM nginx:latest',
+                'COPY ./file ./somewhere',
+                'RUN npm ci --production --ignore-scripts',
+                'RUN npm run prepare',
+            ].join('\n'));
+            const result = await readDockerfile('Dockerfile');
+            expect(result).toEqual([{
+                baseImage: 'nginx:latest',
+                name: undefined,
+                stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                stepsAfterInstall: ['RUN npm run prepare'],
+                install: {
+                    ci: true,
+                    ignoreScripts: true,
+                    onlyProduction: true,
+                },
+            }]);
+        });
+
+        it('should return one stage from dockerfile with ci install parameter', async function (this: ReadDockerfileThisContext) {
+            this.fsReadFile.and.resolveTo([
+                'FROM nginx:latest',
+                'COPY ./file ./somewhere',
+                'RUN npm i --ci',
+                'RUN npm run prepare',
+            ].join('\n'));
+            const result = await readDockerfile('Dockerfile');
+            expect(result).toEqual([{
+                baseImage: 'nginx:latest',
+                name: undefined,
+                stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                stepsAfterInstall: ['RUN npm run prepare'],
+                install: {
+                    ci: true,
+                    ignoreScripts: false,
+                    onlyProduction: false,
+                },
             }]);
         });
 
@@ -94,14 +144,22 @@ describe('readDockerfile', () => {
                     name: 'build',
                     stepsBeforeInstall: ['COPY ./file ./somewhere'],
                     stepsAfterInstall: ['RUN npm run build'],
-                    hasInstall: true,
+                    install: {
+                        ci: undefined,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
                 },
                 {
                     baseImage: 'nginx:latest',
                     name: undefined,
                     stepsBeforeInstall: [],
                     stepsAfterInstall: ['ENTRYPOINT ["entrypoint.sh"]'],
-                    hasInstall: true,
+                    install: {
+                        ci: undefined,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
                 },
             ]);
         });

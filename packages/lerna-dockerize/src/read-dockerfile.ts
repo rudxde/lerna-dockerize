@@ -1,5 +1,12 @@
 import { promises } from 'fs';
 import { getLogger } from './logger';
+import Parser from 'yargs-parser';
+
+interface IInstallOptions {
+    ci: boolean | undefined;
+    onlyProduction: boolean;
+    ignoreScripts: boolean;
+}
 
 export interface DockerStage {
     baseImage: string;
@@ -8,7 +15,7 @@ export interface DockerStage {
     prepareStageName?: string;
     stepsBeforeInstall: string[];
     stepsAfterInstall: string[];
-    hasInstall: boolean;
+    install?: IInstallOptions;
 }
 
 
@@ -50,14 +57,22 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
     }
     const stepsBeforeInstall: string[] = [];
     const stepsAfterInstall: string[] = [];
-    let installHit = false;
+    let installHit: IInstallOptions | undefined = undefined;
     for (; i < steps.length; i++) {
         if (steps[i].match(isStageFromClause)) {
             i--;
             break;
         }
-        if (steps[i].match(/RUN (npm|yarn) (i|install)/)) {
-            installHit = true;
+        const matchesInstall = steps[i].match(/RUN (npm|yarn) (i|install|ci)((\s--?\S+((\s|=)\S+)?)*)/);
+        if (matchesInstall) {
+            const [_, npm, install, parameters] = matchesInstall;
+            installHit = {
+                ci: undefined,
+                ignoreScripts: false,
+                onlyProduction: false,
+                ...parseInstallParameters(parameters),
+                ...(install === 'ci' ? { ci: true } : {}),
+            };
             continue;
         }
         (installHit ? stepsAfterInstall : stepsBeforeInstall).push(steps[i]);
@@ -69,7 +84,7 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             baseImage,
             stepsBeforeInstall,
             stepsAfterInstall,
-            hasInstall: installHit,
+            install: installHit,
         },
     };
 }
@@ -90,4 +105,13 @@ export function splitInSteps(content: string): string[] {
     }
     return result
         .filter(Boolean); // filter empty lines
+}
+
+function parseInstallParameters(params: string): Partial<IInstallOptions> {
+    const parsed = Parser(params);
+    return {
+        ci: parsed.ci,
+        ignoreScripts: parsed.ignoreScripts ?? false,
+        onlyProduction: parsed.production || parsed.only === 'production',
+    };
 }

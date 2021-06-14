@@ -1,0 +1,7 @@
+FROM base as build
+
+COPY --slim ./package.json ./
+RUN npm ci --only=production --ignore-scripts
+
+COPY ./package.json ./
+RUN npm run build

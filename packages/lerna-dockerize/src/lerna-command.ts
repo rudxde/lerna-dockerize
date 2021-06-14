@@ -33,7 +33,7 @@ export class Dockerize extends Command {
             for (let baseStage of baseDockerFile) {
                 result.push(`FROM ${baseStage.baseImage} as ${baseStage.name!}`);
                 result.push(...baseStage.stepsBeforeInstall);
-                if (baseStage.hasInstall) {
+                if (baseStage.install) {
                     result.push(`RUN ${getOptions().packageManager} install`);
                     result.push(...baseStage.stepsAfterInstall);
                 }
@@ -74,7 +74,11 @@ export class Dockerize extends Command {
         let finalStages: DockerStage[] = [
             {
                 baseImage: baseStage.name!,
-                hasInstall: true,
+                install: {
+                    ci: false,
+                    ignoreScripts: false,
+                    onlyProduction: false,
+                },
                 stepsAfterInstall: [],
                 stepsBeforeInstall: [],
             },
@@ -88,7 +92,7 @@ export class Dockerize extends Command {
         for (let finalStage of finalStages) {
             result.push(`FROM ${finalStage.baseImage}${finalStage.name ? (' as ' + finalStage.name) : ''}`);
             result.push(...finalStage.stepsBeforeInstall);
-            if (finalStage.hasInstall) {
+            if (finalStage.install) {
                 for (let pkg of packages) {
                     result.push(`COPY --from=${pkg.getBuildStageName()} ${pkg.dockerWorkingDir} ${pkg.dockerWorkingDir}`);
                 }

@@ -65,6 +65,9 @@ export class Package {
     }
 
     getPrepareStageName(): string | undefined {
+        if (!this.stageHasInstall(this.getBuildStage())) {
+            return this.getBuildStageName();
+        }
         if (!this.dockerFile) {
             return undefined;
         }
@@ -85,6 +88,13 @@ export class Package {
         return this.dockerFile[this.dockerFile.length - 1];
     }
 
+    stageHasInstall(stage?: DockerStage): boolean {
+        if (!stage?.install) {
+            return false;
+        }
+        return true;
+    }
+
     async getFinalizedBuildStages(packageMap: PackageMap): Promise<string[]> {
         if (!this.dockerFile) {
             return [];
@@ -96,7 +106,7 @@ export class Package {
             if (baseImageIsLocalStage) {
                 baseImage = baseImageIsLocalStage.name!;
             }
-            const addPrepareStage = getOptions().addPrepareStages && stage.hasInstall;
+            const addPrepareStage = getOptions().addPrepareStages && this.stageHasInstall(stage);
             if (addPrepareStage) {
                 result.push(`FROM ${baseImage} as ${stage.prepareStageName!}`);
             } else {
@@ -104,14 +114,14 @@ export class Package {
             }
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
             result.push(...(await applyExtendetDockerSyntax(stage.stepsBeforeInstall, this)));
-            if (!stage.hasInstall) {
+            if (!this.stageHasInstall(stage)) {
                 continue;
             }
             result.push(`WORKDIR ${getOptions().dockerfileWorkingDir}`);
 
             const dependencyCopyContent = [];
 
-            const dependencyPackages = (await getDependenciesTransitive(this.name, packageMap))
+            const dependencyPackages = (await getDependenciesTransitive(this.name, packageMap, stage.install!.onlyProduction))
                 .map(dependencyName => {
                     const pkg = packageMap.get(dependencyName);
                     if (!pkg) {
@@ -122,11 +132,19 @@ export class Package {
 
             for (let dependencyPackage of dependencyPackages) {
                 const fromStageName = dependencyPackage.getBuildStageName();
-                const packageDataFromStageName = dependencyPackage.getBuildStage()?.hasInstall ? dependencyPackage.getPrepareStageName() : fromStageName;
+                const packageDataFromStageName = dependencyPackage.getPrepareStageName();
                 const dependencyWorkingDir = dependencyPackage.dockerWorkingDir;
                 const packageJsonPath = normalizePath(joinPath(dependencyWorkingDir, 'package.json'));
                 result.push(`COPY --from=${packageDataFromStageName} ${packageJsonPath} ${dependencyWorkingDir}/`);
                 dependencyCopyContent.push(`COPY --from=${fromStageName} ${dependencyWorkingDir}/ ${dependencyWorkingDir}/`);
+            }
+
+            const bootstrapNpmDirectArgs = [
+                ...(stage.install!.onlyProduction ? ['--production'] : []),
+            ];
+
+            if (bootstrapNpmDirectArgs.length !== 0) {
+                bootstrapNpmDirectArgs.unshift('--');
             }
 
             result.push([
@@ -136,6 +154,9 @@ export class Package {
                 ...(getOptions().hoist ? ['--hoist'] : []),
                 `--scope=${this.name}`,
                 '--includeDependencies',
+                ...(stage.install!.ignoreScripts ? ['--ignore-scripts'] : []),
+                ...(stage.install!.ci ? ['--ci'] : stage.install!.ci === false ? ['--no-ci'] : []),
+                ...bootstrapNpmDirectArgs,
             ].join(' '));
 
             if (addPrepareStage) {
@@ -159,7 +180,7 @@ export class Package {
             originalName: stage.name,
             stepsBeforeInstall: [...stage.stepsBeforeInstall],
             stepsAfterInstall: [...stage.stepsAfterInstall],
-            hasInstall: stage.hasInstall,
+            install: stage.install,
         };
     }
 

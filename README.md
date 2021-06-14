@@ -41,6 +41,19 @@ In the end an Dockerstage will be created based on the last Base Dockerfile stag
 
 You can create a custom Dockerfile for each package. If a package has no Dockerfile lerna-dockerize will try to use the template Dockerfile. The Dockerfile's working directory will be set inside the package directory. You don't need to perform `lerna bootstrap` on your own. just add the line `RUN npm install` and lerna dockerize will handle the bootstrapping.
 
+#### install/bootstrap parameters
+
+You can add parameters to the `RUN npm install` command, to customize the install. `lerna-dockerize` supports currently the `--production`, the `--ignore-scripts`, `--ci` and the `--no-ci` parameters.
+
+The command
+```
+RUN npm ci
+```
+will result in the same result as 
+```
+RUN npm i --ci
+```
+
 #### Multiple stages
 
 You can use multiple stages in each stage an ```RUN npm install``` step will be replaced by bootstrapping and adding the dependent packages. The last stage of the dockerfile will be used for the dependent packages, to install the package. The names of the stages will be scoped with the package name as a prefix.
