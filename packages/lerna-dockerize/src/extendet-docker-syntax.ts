@@ -63,16 +63,34 @@ async function slimCopy(chown: string | undefined, files: string[], destination:
     return `COPY ${chown || ''} ${source} ${destination}`;
 }
 
+function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: string[], pkg: Package): string | undefined {
+    if (command.startsWith('npm run')) {
+        if (!pkg.lernaPackage.scripts[commandTokens[2]]) {
+            getLogger().debug(`The npm run command '${commandTokens[2]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
+            return;
+        } else {
+            return `RUN ${command}`;
+        }
+    }
+    if (command.startsWith('./')) {
+        if (!existsSync(joinPath(pkg.relativePath, command.split(' ')[0]))) {
+            getLogger().debug(
+                `The shell command '${command.split(' ')[0]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`,
+            );
+            return;
+        } else {
+            return `RUN ${command}`;
+        }
+    }
+    getLogger().warn(`The '--if-exists' flag is not supported for the command '${command}' and will be ignored!`);
+    return `RUN ${command}`;
+}
+
 function applyExtendetDockerSyntaxRun(step: string, pkg: Package): string | undefined {
     const [_, ifExists, command] = step.match(isRun)!;
     const commandTokens = command.split(' ');
-    if (ifExists && command.startsWith('npm run') && !pkg.lernaPackage.scripts[commandTokens[2]]) {
-        getLogger().debug(`The npm run command '${commandTokens[2]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
-        return;
-    }
-    if (ifExists && command.startsWith('./') && !existsSync(joinPath(pkg.relativePath, command.split(' ')[0]))) {
-        getLogger().debug(`The shell command '${command.split(' ')[0]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
-        return;
+    if (ifExists) {
+        return applyExtendetDockerSyntaxRunIfExists(command, commandTokens, pkg);
     }
     return `RUN ${command}`;
 }
