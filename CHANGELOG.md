@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/rudxde/lerna-dockerize/compare/v0.5.0...v0.6.0) (2021-06-17)
+
+
+### Features
+
+* add support for install parameters ([bd9f626](https://github.com/rudxde/lerna-dockerize/commit/bd9f6264344c1f4765995570f1b6f7ecfca3fcc3))
+* add warning for misuse of the --if-exists flag in the RUN command ([6f17659](https://github.com/rudxde/lerna-dockerize/commit/6f176599d41e5bc69c0ffb3894b4e5b0c9dc9687))
+
+
+
+
+
 # [0.5.0](https://github.com/rudxde/lerna-dockerize/compare/v0.4.1...v0.5.0) (2021-06-12)
 
 
