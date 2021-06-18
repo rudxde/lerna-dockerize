@@ -6,6 +6,12 @@ lerna-dockerize is a package, that generates a dockerfile for lerna (see [github
 
 It generates a multistage build Dockerfile, with stages for each package.
 
+## Software requirements
+
+The current nodejs major versions 12.x, 14.x and 16.x are supported.
+
+> Dockerfiles generated with `lerna-dockerize` work with the default docker builder, but it is recommended to use the new [Docker BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) engine. With Docker BuildKit and the use of the [`addPrepareStages`](#configuration) option, you can get more speed out of your builds.
+
 ## install
 
 ```
@@ -121,20 +127,20 @@ For example:
 
 The following options do exists:
 
-| Option                 | cli parameter                    | description                                                              | details                                                                |
-|------------------------|----------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------|
-| baseDockerfileName     | --baseDockerfileName [value]     | The name of the base Dockerfile.                                         | [string] [default: "Dockerfile.base"]                                  |
-| templateDockerfileName | --templateDockerfileName [value] | The name of the Dockerfile template for all packages.                    | [string]                                                               |
-| finalStage             | --no-finalStage                  | Should an final stage be added, which combines all packages.             | [boolean] [default: true]                                                               |
-| finalDockerfileName    | --finalDockerfileName [value]    | Dockerfile-Name for custom final stages.                                 | [string]                                                               |
-| outDockerfileName      | --outDockerfileName [value]      | Name for where output Dockerfile should be stored.                       | [string] [default: "Dockerfile"]                                       |
-| dockerfileWorkingDir   | --dockerfileWorkingDir [value]   | The root working directory for the created dockerfile                    | [string] [default: "/app/"]                                            |
-| packageManager         | --packageManager [value]         | The package manager used by the project.                                 | [string] [choices: "npm", "yarn"] [default: "npm"]                     |
-| lernaCommand           | --lernaCommand [value]           | The command used to call lerna inside the Dockerfile.                    | [string] [default: "npx lerna"]                                        |
-| logLevel               | --logLevel [value]               | The level which should be logged.                                        | [string] [choices: "info", "error", "debug", "warn"] [default: "info"] |
-| logConsole             | --no-logConsole                  | Should be logged to the console                                          | [boolean] [default: true]                                              |
-| hoist                  | --hoist                          | Should the hoist option of lerna be used inside the generated dockerfile | [boolean] [default: false]                                             |
-| addPrepareStages       | --addPrepareStages               | Should stages be split into extra prepare stage.                         | [boolean] [default: false]                                             |
+| Option                 | cli parameter                    | description                                                                                | details                                                                |
+|------------------------|----------------------------------|--------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| baseDockerfileName     | --baseDockerfileName [value]     | The name of the base Dockerfile.                                                           | [string] [default: "Dockerfile.base"]                                  |
+| templateDockerfileName | --templateDockerfileName [value] | The name of the Dockerfile template for all packages.                                      | [string]                                                               |
+| finalStage             | --no-finalStage                  | Should an final stage be added, which combines all packages.                               | [boolean] [default: true]                                              |
+| finalDockerfileName    | --finalDockerfileName [value]    | Dockerfile-Name for custom final stages.                                                   | [string]                                                               |
+| outDockerfileName      | --outDockerfileName [value]      | Name for where output Dockerfile should be stored.                                         | [string] [default: "Dockerfile"]                                       |
+| dockerfileWorkingDir   | --dockerfileWorkingDir [value]   | The root working directory for the created dockerfile                                      | [string] [default: "/app/"]                                            |
+| packageManager         | --packageManager [value]         | The package manager used by the project.                                                   | [string] [choices: "npm", "yarn"] [default: "npm"]                     |
+| lernaCommand           | --lernaCommand [value]           | The command used to call lerna inside the Dockerfile.                                      | [string] [default: "npx lerna"]                                        |
+| logLevel               | --logLevel [value]               | The level which should be logged.                                                          | [string] [choices: "info", "error", "debug", "warn"] [default: "info"] |
+| logConsole             | --no-logConsole                  | Should be logged to the console                                                            | [boolean] [default: true]                                              |
+| hoist                  | --hoist                          | Should the hoist option of lerna be used inside the generated dockerfile                   | [boolean] [default: false]                                             |
+| addPrepareStages       | --addPrepareStages               | Should stages be split into extra prepare stage. Works the best with Docker BuildKit.      | [boolean] [default: false]                                             |
 
 
 
@@ -165,3 +171,4 @@ COPY ./package.json ./
 ```
 
 > If you want to use --if-exists and --slim in parallel, the --if-exists needs to be written first.
+
