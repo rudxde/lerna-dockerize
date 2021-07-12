@@ -5,7 +5,7 @@ import { loadOptions } from './options';
 
 async function main(): Promise<void> {
     await loadOptions();
-    new Dockerize(process.argv);
+    new Dockerize({composed: ''});
 }
 
 main()
