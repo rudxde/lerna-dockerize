@@ -8,6 +8,7 @@ import { normalizePath } from './normalize-path';
 import { getOptions } from './options';
 import { applyExtendetDockerSyntax } from './extendet-docker-syntax';
 import { getLogger } from './logger';
+import { getDockerFileFromInstruction } from './lerna-command';
 
 export type PackageMap = Map<string, Package>;
 
@@ -108,9 +109,9 @@ export class Package {
             }
             const addPrepareStage = getOptions().addPrepareStages && this.stageHasInstall(stage);
             if (addPrepareStage) {
-                result.push(`FROM ${baseImage} as ${stage.prepareStageName!}`);
+                result.push(getDockerFileFromInstruction(baseImage, stage.prepareStageName, stage.plattform));
             } else {
-                result.push(`FROM ${baseImage} as ${stage.name!}`);
+                result.push(getDockerFileFromInstruction(baseImage, stage.name!, stage.plattform));
             }
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
             result.push(...(await applyExtendetDockerSyntax(stage.stepsBeforeInstall, this)));
@@ -160,7 +161,7 @@ export class Package {
             ].join(' '));
 
             if (addPrepareStage) {
-                result.push(`FROM ${stage.prepareStageName!} as ${stage.name!}`);
+                result.push(getDockerFileFromInstruction(stage.prepareStageName!, stage.name!, stage.plattform));
             }
 
             result.push(...dependencyCopyContent);
@@ -176,6 +177,7 @@ export class Package {
         return {
             baseImage: stage.baseImage,
             name: stageName,
+            plattform: stage.plattform,
             prepareStageName: getOptions().addPrepareStages ? `${stageName}_prepare` : undefined,
             originalName: stage.name,
             stepsBeforeInstall: [...stage.stepsBeforeInstall],

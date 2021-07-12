@@ -10,6 +10,7 @@ interface IInstallOptions {
 
 export interface DockerStage {
     baseImage: string;
+    plattform?: string;
     originalName?: string;
     name?: string;
     prepareStageName?: string;
@@ -42,15 +43,17 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
     let i = startIndex;
     let baseImage;
     let stageName;
-    const isStageFromClause = /(FROM|from) ([a-zA-Z0-9:_\-@.\/]*)( as ([a-zA-Z0-9:_-]*))?/;
+    let plattform;
+    const isStageFromClause = /(FROM|from)(\s--platform=(\S+))? ([a-zA-Z0-9:_\-@.\/]*)( as ([a-zA-Z0-9:_-]*))?/;
     for (; ; i++) {
         if (i >= steps.length) {
             return undefined;
         }
         const matching = steps[i].match(isStageFromClause);
         if (matching) {
-            baseImage = matching[2];
-            stageName = matching[4];
+            plattform = matching[3];
+            baseImage = matching[4];
+            stageName = matching[6];
             i++;
             break;
         }
@@ -81,6 +84,7 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
         endIndex: i,
         stage: {
             name: stageName,
+            plattform: plattform,
             baseImage,
             stepsBeforeInstall,
             stepsAfterInstall,

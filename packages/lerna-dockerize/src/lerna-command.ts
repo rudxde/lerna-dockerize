@@ -31,7 +31,7 @@ export class Dockerize extends Command {
 
             const result: string[] = [];
             for (let baseStage of baseDockerFile) {
-                result.push(`FROM ${baseStage.baseImage} as ${baseStage.name!}`);
+                result.push(getDockerFileFromInstruction(baseStage.baseImage, baseStage.name, baseStage.plattform));
                 result.push(...baseStage.stepsBeforeInstall);
                 if (baseStage.install) {
                     result.push(`RUN ${getOptions().packageManager} install`);
@@ -90,7 +90,7 @@ export class Dockerize extends Command {
         }
 
         for (let finalStage of finalStages) {
-            result.push(`FROM ${finalStage.baseImage}${finalStage.name ? (' as ' + finalStage.name) : ''}`);
+            result.push(getDockerFileFromInstruction(finalStage.baseImage, finalStage.name, finalStage.plattform));
             result.push(...finalStage.stepsBeforeInstall);
             if (finalStage.install) {
                 for (let pkg of packages) {
@@ -101,4 +101,13 @@ export class Dockerize extends Command {
         }
         return result;
     }
+}
+
+export function getDockerFileFromInstruction(baseImage: string, stageName?: string, plattform?: string): string {
+    return [
+        'FROM',
+        ...(plattform ? [`--platform=${plattform}`] : []),
+        baseImage,
+        ...(stageName ? ['as', stageName] : []),
+    ].join(' ');
 }

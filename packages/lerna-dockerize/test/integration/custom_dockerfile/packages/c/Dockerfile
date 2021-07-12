@@ -1,4 +1,4 @@
-FROM base as build
+FROM --platform=arm64 base as build
 
 COPY --slim ./package.json ./
 RUN npm install
