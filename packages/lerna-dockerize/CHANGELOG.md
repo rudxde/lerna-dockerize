@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/rudxde/lerna-dockerize/compare/v0.6.0...v0.7.0) (2021-07-12)
+
+
+### Bug Fixes
+
+* remove lerna version: vundefined logging at startup ([ec0a49e](https://github.com/rudxde/lerna-dockerize/commit/ec0a49e8bfc303439012902eb7a81c327164c232))
+
+
+### Features
+
+* add support for --platform flag for dockerfile FROM instruction ([f7e3f40](https://github.com/rudxde/lerna-dockerize/commit/f7e3f40922b5acdc98f49b905928b3b9ecfe7bf3))
+
+
+
+
+
 # [0.6.0](https://github.com/rudxde/lerna-dockerize/compare/v0.5.0...v0.6.0) (2021-06-17)
 
 
