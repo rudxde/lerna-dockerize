@@ -4,6 +4,7 @@ import { existsSync } from 'fs';
 import { normalizePath } from './normalize-path';
 import { getLogger } from './logger';
 import { slimPackage } from './slim-package';
+import { getOptions } from './options';
 
 const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists\s+)?(--slim\s+)?(.*)\s+(.*)/;
 const isRun = /RUN( --if-exists)? (.+)/;
@@ -65,7 +66,12 @@ async function slimCopy(chown: string | undefined, files: string[], destination:
 
 function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: string[], pkg: Package): string | undefined {
     if (command.startsWith('npm run')) {
-        if (!pkg.lernaPackage.scripts[commandTokens[2]]) {
+        const npmCommand = commandTokens[2];
+        if(npmCommand.startsWith('$')) {
+            getLogger().debug(`The npm run command '${commandTokens[2]}' looks like a variable.`);
+            return ['RUN', getOptions().packageManager, 'run', npmCommand, '--if-present', ...commandTokens.slice(3)].join(' ');
+        }
+        if (!pkg.lernaPackage.scripts[npmCommand]) {
             getLogger().debug(`The npm run command '${commandTokens[2]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
             return;
         } else {
