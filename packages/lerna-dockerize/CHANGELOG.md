@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/rudxde/lerna-dockerize/compare/v0.7.1...v0.8.0) (2021-08-31)
+
+
+### Features
+
+* **extended-syntax:** use lerna run for npm run scripts with variable ([a20ff10](https://github.com/rudxde/lerna-dockerize/commit/a20ff1054b34fc350b315203372b3dc8e4627920))
+
+
+
+
+
 ## [0.7.1](https://github.com/rudxde/lerna-dockerize/compare/v0.7.0...v0.7.1) (2021-08-16)
 
 **Note:** Version bump only for package lerna-dockerize
