@@ -6,8 +6,8 @@ import { getLogger } from './logger';
 import { slimPackage } from './slim-package';
 import { getOptions } from './options';
 
-const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists\s+)?(--slim\s+)?(.*)\s+(.*)/;
-const isRun = /RUN( --if-exists)? (.+)/;
+const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists\s+)?(--slim\s+)?(.*)\s+(.*)/s;
+const isRun = /RUN( --if-exists)? (.+)/s;
 
 export async function applyExtendetDockerSyntax(steps: string[], pkg: Package): Promise<string[]> {
     const result: string[] = [];
