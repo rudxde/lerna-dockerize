@@ -41,7 +41,7 @@ RUN npm i
 COPY ./lerna.json ./
 ```
 
-In the end an Dockerstage will be created based on the last Base Dockerfile stage contains ever package
+In the end a Dockerstage will be created based on the last Base Dockerfile stage contains ever package
 
 ### Custom package Dockerfile
 
@@ -62,7 +62,7 @@ RUN npm i --ci
 
 #### Multiple stages
 
-You can use multiple stages in each stage an ```RUN npm install``` step will be replaced by bootstrapping and adding the dependent packages. The last stage of the dockerfile will be used for the dependent packages, to install the package. The names of the stages will be scoped with the package name as a prefix.
+You can use multiple stages. In each stage a ```RUN npm install``` step will be replaced by bootstrapping and adding the dependent packages. The last stage of the dockerfile will be used for the dependent packages, to install the package. The names of the stages will be scoped with the package name as a prefix.
 
 ### Template Dockerfile
 
@@ -103,7 +103,7 @@ npx lerna-dockerize --template-dockerfile-name Dockerfile.template
 ```
 
 
-This will output an Dockerfile in your projects root.
+This will output a Dockerfile in your projects root.
 
 ## Configuration
 
@@ -131,7 +131,7 @@ The following options do exists:
 |------------------------|----------------------------------|--------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
 | baseDockerfileName     | --baseDockerfileName [value]     | The name of the base Dockerfile.                                                           | [string] [default: "Dockerfile.base"]                                  |
 | templateDockerfileName | --templateDockerfileName [value] | The name of the Dockerfile template for all packages.                                      | [string]                                                               |
-| finalStage             | --no-finalStage                  | Should an final stage be added, which combines all packages.                               | [boolean] [default: true]                                              |
+| finalStage             | --no-finalStage                  | Should a final stage be added, which combines all packages.                               | [boolean] [default: true]                                              |
 | finalDockerfileName    | --finalDockerfileName [value]    | Dockerfile-Name for custom final stages.                                                   | [string]                                                               |
 | outDockerfileName      | --outDockerfileName [value]      | Name for where output Dockerfile should be stored.                                         | [string] [default: "Dockerfile"]                                       |
 | dockerfileWorkingDir   | --dockerfileWorkingDir [value]   | The root working directory for the created dockerfile                                      | [string] [default: "/app/"]                                            |
