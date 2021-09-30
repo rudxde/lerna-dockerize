@@ -45,7 +45,7 @@ export async function loadOptions(args: string[] = process.argv): Promise<IOptio
             type: 'string',
         })
         .option('finalStage', {
-            description: 'Should an final stage be added, which combines all packages.',
+            description: 'Should a final stage be added, which combines all packages.',
             type: 'boolean',
             default: true,
         })
