@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.2](https://github.com/rudxde/lerna-dockerize/compare/v0.8.1...v0.8.2) (2021-09-30)
+
+
+### Bug Fixes
+
+* **extendet-docker-syntax:** don't ommit multiple lines in multiline copy and run ([9888487](https://github.com/rudxde/lerna-dockerize/commit/9888487df5d52d339fa3685d89b0ca827d882f5f))
+
+
+
+
+
 ## [0.8.1](https://github.com/rudxde/lerna-dockerize/compare/v0.8.0...v0.8.1) (2021-09-04)
 
 **Note:** Version bump only for package lerna-dockerize
