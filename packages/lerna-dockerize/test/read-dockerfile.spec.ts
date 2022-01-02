@@ -147,6 +147,28 @@ describe('readDockerfile', () => {
             }]);
         });
 
+        it('should pass npm i of dependencies into dockerfile', async function (this: ReadDockerfileThisContext) {
+            this.fsReadFile.and.resolveTo([
+                'FROM nginx:latest',
+                'COPY ./file ./somewhere',
+                'RUN npm i --ci',
+                'RUN npm i lerna',
+            ].join('\n'));
+            const result = await readDockerfile('Dockerfile');
+            expect(result).toEqual([{
+                baseImage: 'nginx:latest',
+                plattform: undefined,
+                name: undefined,
+                stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                stepsAfterInstall: ['RUN npm i lerna'],
+                install: {
+                    ci: true,
+                    ignoreScripts: false,
+                    onlyProduction: false,
+                },
+            }]);
+        });
+
         it('should return multiple stages from dockerfile', async function (this: ReadDockerfileThisContext) {
             this.fsReadFile.and.resolveTo([
                 'FROM node:14 as build',

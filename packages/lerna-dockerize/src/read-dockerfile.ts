@@ -66,17 +66,20 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             i--;
             break;
         }
-        const matchesInstall = steps[i].match(/RUN (npm|yarn) (i|install|ci)((\s--?\S+((\s|=)\S+)?)*)/);
+        const matchesInstall = steps[i].match(/RUN (npm|yarn) (i|install|ci)((\s-?-?\S+((\s|=)\S+)?)*)/);
         if (matchesInstall) {
             const [_, npm, install, parameters] = matchesInstall;
-            installHit = {
-                ci: undefined,
-                ignoreScripts: false,
-                onlyProduction: false,
-                ...parseInstallParameters(parameters),
-                ...(install === 'ci' ? { ci: true } : {}),
-            };
-            continue;
+            const isDependencyInstall = parameters.split(' ').filter(x => !!x && !x.startsWith('-')).length !== 0;
+            if (!isDependencyInstall) {
+                installHit = {
+                    ci: undefined,
+                    ignoreScripts: false,
+                    onlyProduction: false,
+                    ...parseInstallParameters(parameters),
+                    ...(install === 'ci' ? { ci: true } : {}),
+                };
+                continue;
+            }
         }
         (installHit ? stepsAfterInstall : stepsBeforeInstall).push(steps[i]);
     }
