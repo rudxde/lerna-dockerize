@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.3](https://github.com/rudxde/lerna-dockerize/compare/v0.8.2...v0.8.3) (2022-01-04)
+
+
+### Bug Fixes
+
+* do not interpret npm i dependency install as npm i ([876188f](https://github.com/rudxde/lerna-dockerize/commit/876188f8c7b7daea5e7cf2925543cbc4f84f77c6))
+
+
+
+
+
 ## [0.8.2](https://github.com/rudxde/lerna-dockerize/compare/v0.8.1...v0.8.2) (2021-09-30)
 
 
