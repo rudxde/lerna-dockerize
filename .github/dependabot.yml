@@ -20,7 +20,7 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
-    directory: "/pacakges/lerna-dockerize-init/"
+    directory: "/pacakges/init/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
