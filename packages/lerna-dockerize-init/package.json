@@ -1,0 +1,59 @@
+{
+  "name": "lerna-dockerize-init",
+  "version": "0.7.1",
+  "description": "A dockerfile generator for lerna projects",
+  "keywords": [
+    "lerna",
+    "docker",
+    "monorepo"
+  ],
+  "main": "dist/index",
+  "types": "dist/index",
+  "scripts": {
+    "build": "tsc -p .",
+    "build:prod": "npm run build",
+    "publish:npm": "npm publish",
+    "pretest": "npm run build",
+    "test": "ts-node -P ./tsconfig.test.json node_modules/jasmine/bin/jasmine --config=jasmine.json",
+    "test:coverage": "ts-node -P ./tsconfig.test.json node_modules/nyc/bin/nyc.js npm run test",
+    "lint": "eslint -c .eslintrc.js --ext .ts ."
+  },
+  "author": "rudxde",
+  "homepage": "https://github.com/rudxde/lerna-dockerize",
+  "repository": "https://github.com/rudxde/lerna-dockerize",
+  "bugs": "https://github.com/rudxde/lerna-dockerize",
+  "bin": {
+    "lerna-dockerize": "./bin"
+  },
+  "dependencies": {
+    "logform": "^2.2.0",
+    "winston": "^3.3.3",
+    "yargs": "^17.0.1"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.6.9",
+    "@types/node": "^16.3.1",
+    "@types/npm-package-arg": "^6.1.0",
+    "@types/yargs": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "jasmine": "^3.7.0",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "files": [
+    "package*.json",
+    "README.md",
+    "dist/**"
+  ],
+  "license": "Apache-2.0"
+}

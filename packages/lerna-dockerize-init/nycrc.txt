@@ -1,0 +1,26 @@
+{
+    "check-coverage": false,
+    "per-file": true,
+    "lines": 50,
+    "statements": 50,
+    "functions": 50,
+    "branches": 50,
+    "sourceMap": true,
+    "exclude": [
+        "**/*.spec.ts",
+        "node_modules/**/*",
+        "test/**/*"
+    ],
+    "reporter": [
+        "lcov",
+        "text-summary"
+    ],
+    "cache": true,
+    "all": false,
+    "temp-directory": "./.tmp/coverage",
+    "report-dir": "./dist/coverage/",
+    "extension": [
+      ".ts"
+    ]
+
+}
