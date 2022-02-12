@@ -23,7 +23,7 @@
   "repository": "https://github.com/rudxde/lerna-dockerize",
   "bugs": "https://github.com/rudxde/lerna-dockerize",
   "bin": {
-    "lerna-dockerize": "./bin"
+    "lerna-dockerize-init": "./bin"
   },
   "dependencies": {
     "chalk": "^5.0.0",
