@@ -55,8 +55,8 @@ async function installLernaDockerize(args: IInitArgs): Promise<void> {
 }
 
 async function addTemplates(args: IInitArgs): Promise<void> {
-    const baseDockerfileSrc = joinPath(__dirname, '../../templates/Dockerfile.base');
-    const templateDockerfileSrc = joinPath(__dirname, '../../templates/Dockerfile.template');
+    const baseDockerfileSrc = joinPath(__dirname, '../templates/Dockerfile.base');
+    const templateDockerfileSrc = joinPath(__dirname, '../templates/Dockerfile.template');
     const baseDockerfileDest = joinPath(args.workingDirectory ?? process.cwd(), args.baseDockerfileName);
     const templateDockerfileDest = joinPath(args.workingDirectory ?? process.cwd(), args.templateDockerFileName);
     await fsPromises.copyFile(baseDockerfileSrc, baseDockerfileDest);
