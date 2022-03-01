@@ -57,7 +57,8 @@
   "files": [
     "package*.json",
     "README.md",
-    "dist/**"
+    "dist/**",
+    "templates/**"
   ],
   "license": "Apache-2.0"
 }
