@@ -4,7 +4,7 @@ import { join as joinPath } from 'path';
 import { spawn } from 'child_process';
 // import type { Ora } from 'ora';
 import { detectIdent } from './detect-ident';
-export async function main(args: IInitArgs) {
+export async function main(args: IInitArgs): Promise<void> {
     // const spinner = (await import('ora')).default('Installing lerna-dockerize').start();
     try {
         await installLernaDockerize(args);
@@ -42,10 +42,10 @@ async function installLernaDockerize(args: IInitArgs): Promise<void> {
         executable, ['install', ...(args.installAsDevDependency ? ['--save'] : ['--save-dev']), 'lerna-dockerize'],
         {
             cwd: args.workingDirectory ?? process.cwd(),
-            stdio: "pipe"
+            stdio: 'pipe',
         });
     await new Promise<void>((resolve, reject) => {
-        installProcess.on("close", (code) => {
+        installProcess.on('close', (code) => {
             if (code !== 0) {
                 reject(new Error(`The installation of lerna-dockerize failed, the process exited with the unsuccessful statuscode '${code}'.`));
             }
@@ -54,7 +54,7 @@ async function installLernaDockerize(args: IInitArgs): Promise<void> {
     });
 }
 
-async function addTemplates(args: IInitArgs) {
+async function addTemplates(args: IInitArgs): Promise<void> {
     const baseDockerfileSrc = joinPath(__dirname, '../../templates/Dockerfile.base');
     const templateDockerfileSrc = joinPath(__dirname, '../../templates/Dockerfile.template');
     const baseDockerfileDest = joinPath(args.workingDirectory ?? process.cwd(), args.baseDockerfileName);
@@ -63,7 +63,7 @@ async function addTemplates(args: IInitArgs) {
     await fsPromises.copyFile(templateDockerfileSrc, templateDockerfileDest);
 }
 
-async function addConfig(args: IInitArgs) {
+async function addConfig(args: IInitArgs): Promise<void> {
     const lernaConfigPath = joinPath(args.workingDirectory ?? process.cwd(), 'lerna.json');
     if (!existsSync(lernaConfigPath)) {
         throw new Error(`No lerna.json was found. Please run this command in a project directory!`);
@@ -74,14 +74,14 @@ async function addConfig(args: IInitArgs) {
         lernaConfigObject['lerna-dockerize'] = {};
     }
     lernaConfigObject['lerna-dockerize'] = {
-        "templateDockerfileName": args.templateDockerFileName,
-        "baseDockerfileName": args.baseDockerfileName,
+        'templateDockerfileName': args.templateDockerFileName,
+        'baseDockerfileName': args.baseDockerfileName,
     };
     const indentation = detectIdent(lernaConfig);
     await fsPromises.writeFile(lernaConfigPath, JSON.stringify(lernaConfigObject, undefined, indentation));
 }
 
-async function addScripts(args: IInitArgs) {
+async function addScripts(args: IInitArgs): Promise<void> {
     const packageJsonPath = joinPath(args.workingDirectory ?? process.cwd(), 'package.json');
     if (!existsSync(packageJsonPath)) {
         throw new Error(`No package.json was found. Please run this command in a project directory!`);
