@@ -2,33 +2,34 @@ import { IInitArgs } from './args';
 import { promises as fsPromises, existsSync } from 'fs';
 import { join as joinPath } from 'path';
 import { spawn } from 'child_process';
-// import type { Ora } from 'ora';
 import { detectIdent } from './detect-ident';
+
 export async function main(args: IInitArgs): Promise<void> {
-    // const spinner = (await import('ora')).default('Installing lerna-dockerize').start();
+    // workaround for esm import with typescript
+    // issue: https://github.com/microsoft/TypeScript/issues/43329
+    const ora = await (eval('import("ora")') as Promise<typeof import('ora')>);
+    const spinner = ora.default('Installing lerna-dockerize').start();
     try {
         await installLernaDockerize(args);
         await addTemplates(args);
         await addConfig(args);
         await addScripts(args);
-        // spinner.succeed();
+        spinner.succeed('lerna-dockerize was successfully installed!');
     } catch (err) {
         if (!(err instanceof Error)) {
             console.error(err);
             return;
         }
         console.error(err);
-        // spinner.fail(err.message);
+        spinner.fail(err.message);
     }
 }
-
 
 async function installLernaDockerize(args: IInitArgs): Promise<void> {
     const packageJsonPath = joinPath(args.workingDirectory ?? process.cwd(), 'package.json');
     if (!existsSync(packageJsonPath)) {
         throw new Error(`No package.json was found. Please run this command in a project directory!`);
     }
-    // spinner.text = `Installing lerna-dockerize over ${args.packageManager}`;
     const packageJson = await fsPromises.readFile(packageJsonPath, 'utf8');
     const packageJsonObject = JSON.parse(packageJson);
     if (packageJsonObject['dependencies']?.['lerna-dockerize']) {
