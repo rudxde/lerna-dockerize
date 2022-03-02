@@ -8,6 +8,8 @@ export async function main(args: IInitArgs): Promise<void> {
     // workaround for esm import with typescript
     // issue: https://github.com/microsoft/TypeScript/issues/43329
     const ora = await (eval('import("ora")') as Promise<typeof import('ora')>);
+    const chalk = (await (eval('import("chalk")') as Promise<typeof import('chalk')>)).default;
+    
     const spinner = ora.default('Installing lerna-dockerize').start();
     try {
         await installLernaDockerize(args);
@@ -15,6 +17,8 @@ export async function main(args: IInitArgs): Promise<void> {
         await addConfig(args);
         await addScripts(args);
         spinner.succeed('lerna-dockerize was successfully installed!');
+        console.log(`\nnow try to run:`);
+        console.log(`\t${chalk.yellow('>')} ${chalk.underline.blue(`npm run lerna-dockerize`)}`);
     } catch (err) {
         if (!(err instanceof Error)) {
             console.error(err);
