@@ -88,7 +88,10 @@ async function addScripts(args: IInitArgs): Promise<void> {
     }
     const packageJson = await fsPromises.readFile(packageJsonPath, 'utf8');
     const packageJsonObject = JSON.parse(packageJson);
-
+    if (!packageJsonObject['scripts']) {
+        packageJsonObject['scripts'] = {};
+    }
+    packageJsonObject['scripts'][args.scriptName] = 'lerna-dockerize';
     const indentation = detectIdent(packageJson);
     await fsPromises.writeFile(packageJsonPath, JSON.stringify(packageJsonObject, undefined, indentation));
 }

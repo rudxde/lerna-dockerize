@@ -4,4 +4,5 @@ export interface IInitArgs {
     packageManager: string;
     templateDockerFileName: string;
     baseDockerfileName: string;
+    scriptName: string;
 };

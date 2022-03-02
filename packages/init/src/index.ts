@@ -27,6 +27,10 @@ export const command: CommandModule<{}, IInitArgs> = {
             type: 'string',
             default: 'Dockerfile.base',
         },
+        scriptName: {
+            type: 'string',
+            default: 'lerna-dockerize',
+        },
     },
     handler: async (args: IInitArgs) => {
         await (await import('./main')).main(args);
