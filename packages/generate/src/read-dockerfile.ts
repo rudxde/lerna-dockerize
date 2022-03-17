@@ -1,5 +1,5 @@
 import { promises } from 'fs';
-import { getLogger } from './logger';
+import { getLogger } from '@lerna-dockerize/logger';
 import Parser from 'yargs-parser';
 
 interface IInstallOptions {

@@ -1,13 +1,13 @@
 import { PackageGraphNode } from '@lerna/package-graph';
 import { Package as LernaPackage } from '@lerna/package';
 import { DockerStage, readDockerfile } from './read-dockerfile';
-import { promises, existsSync } from 'fs';
+import { promises } from 'fs';
 import { join as joinPath, relative } from 'path';
 import { getDependenciesTransitive } from './get-dependencies-transitive';
 import { normalizePath } from './normalize-path';
-import { getOptions } from './options';
+import { IGenerateArgs } from './args';
 import { applyExtendetDockerSyntax } from './extendet-docker-syntax';
-import { getLogger } from './logger';
+import { getLogger } from '@lerna-dockerize/logger';
 import { getDockerFileFromInstruction } from './lerna-command';
 
 export type PackageMap = Map<string, Package>;
@@ -21,6 +21,7 @@ export class Package {
         public name: string,
         public lernaPackage: LernaPackage,
         public lernaPackageGraphNode: PackageGraphNode,
+        private args: IGenerateArgs,
     ) { }
 
     async findDockerfile(): Promise<string | undefined> {
@@ -58,7 +59,7 @@ export class Package {
     }
 
     get dockerWorkingDir(): string {
-        return getOptions().dockerfileWorkingDir + this.relativePath;
+        return this.args.dockerfileWorkingDir + this.relativePath;
     }
 
     getPackageStageNamePrefix(): string {
@@ -72,7 +73,7 @@ export class Package {
         if (!this.dockerFile) {
             return undefined;
         }
-        if (!getOptions().addPrepareStages) {
+        if (!this.args.addPrepareStages) {
             return this.getBuildStageName();
         }
         return this.dockerFile[this.dockerFile.length - 1].prepareStageName;
@@ -107,18 +108,18 @@ export class Package {
             if (baseImageIsLocalStage) {
                 baseImage = baseImageIsLocalStage.name!;
             }
-            const addPrepareStage = getOptions().addPrepareStages && this.stageHasInstall(stage);
+            const addPrepareStage = this.args.addPrepareStages && this.stageHasInstall(stage);
             if (addPrepareStage) {
                 result.push(getDockerFileFromInstruction(baseImage, stage.prepareStageName, stage.plattform));
             } else {
                 result.push(getDockerFileFromInstruction(baseImage, stage.name!, stage.plattform));
             }
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...(await applyExtendetDockerSyntax(stage.stepsBeforeInstall, this)));
+            result.push(...(await applyExtendetDockerSyntax(stage.stepsBeforeInstall, this, this.args)));
             if (!this.stageHasInstall(stage)) {
                 continue;
             }
-            result.push(`WORKDIR ${getOptions().dockerfileWorkingDir}`);
+            result.push(`WORKDIR ${this.args.dockerfileWorkingDir}`);
 
             const dependencyCopyContent = [];
 
@@ -150,9 +151,9 @@ export class Package {
 
             result.push([
                 'RUN',
-                getOptions().lernaCommand,
+                this.args.lernaCommand,
                 'bootstrap',
-                ...(getOptions().hoist ? ['--hoist'] : []),
+                ...(this.args.hoist ? ['--hoist'] : []),
                 `--scope=${this.name}`,
                 '--includeDependencies',
                 ...(stage.install!.ignoreScripts ? ['--ignore-scripts'] : []),
@@ -167,7 +168,7 @@ export class Package {
             result.push(...dependencyCopyContent);
 
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...(await applyExtendetDockerSyntax(stage.stepsAfterInstall, this)));
+            result.push(...(await applyExtendetDockerSyntax(stage.stepsAfterInstall, this, this.args)));
         }
         return result;
     }
@@ -178,7 +179,7 @@ export class Package {
             baseImage: stage.baseImage,
             name: stageName,
             plattform: stage.plattform,
-            prepareStageName: getOptions().addPrepareStages ? `${stageName}_prepare` : undefined,
+            prepareStageName: this.args.addPrepareStages ? `${stageName}_prepare` : undefined,
             originalName: stage.name,
             stepsBeforeInstall: [...stage.stepsBeforeInstall],
             stepsAfterInstall: [...stage.stepsAfterInstall],

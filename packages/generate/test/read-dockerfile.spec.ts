@@ -1,8 +1,7 @@
 import 'jasmine';
 import { promises } from 'fs';
 import { readStage, splitInSteps, readDockerfile } from '../src/read-dockerfile';
-import { loadOptions } from '../src/options';
-import { getLogger } from '../src/logger';
+import { getLogger } from '@lerna-dockerize/logger';
 
 interface ReadDockerfileThisContext {
     fsReadFile: jasmine.Spy<typeof promises.readFile>;
@@ -11,10 +10,6 @@ interface ReadDockerfileThisContext {
 describe('readDockerfile', () => {
 
     describe('readDockerfile', () => {
-
-        beforeAll(async () => {
-            await loadOptions([]);
-        });
 
         beforeEach(function (this: ReadDockerfileThisContext) {
             this.fsReadFile = spyOn(promises, 'readFile');

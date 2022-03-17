@@ -2,21 +2,21 @@ import { Package } from './package';
 import { join as joinPath } from 'path';
 import { existsSync } from 'fs';
 import { normalizePath } from './normalize-path';
-import { getLogger } from './logger';
+import { getLogger } from '@lerna-dockerize/logger';
 import { slimPackage } from './slim-package';
-import { getOptions } from './options';
+import { IGenerateArgs } from './args';
 
 const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists\s+)?(--slim\s+)?(.*)\s+(.*)/s;
 const isRun = /RUN( --if-exists)? (.+)/s;
 
-export async function applyExtendetDockerSyntax(steps: string[], pkg: Package): Promise<string[]> {
+export async function applyExtendetDockerSyntax(steps: string[], pkg: Package, args: IGenerateArgs): Promise<string[]> {
     const result: string[] = [];
     for (let step of steps) {
         const isCopyMatch = step.match(isCopy);
         const isRunMatch = step.match(isRun);
         const transformedStep =
             isCopyMatch ? await applyExtendetDockerSyntaxCopy(step, pkg) :
-                isRunMatch ? applyExtendetDockerSyntaxRun(step, pkg) :
+                isRunMatch ? applyExtendetDockerSyntaxRun(step, pkg, args) :
                     step;
         if (transformedStep) {
             result.push(transformedStep);
@@ -64,12 +64,12 @@ async function slimCopy(chown: string | undefined, files: string[], destination:
     return `COPY ${chown || ''} ${source} ${destination}`;
 }
 
-function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: string[], pkg: Package): string | undefined {
+function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: string[], pkg: Package, args: IGenerateArgs): string | undefined {
     if (command.startsWith('npm run')) {
         const npmCommand = commandTokens[2];
         if(npmCommand.startsWith('$')) {
             getLogger().debug(`The npm run command '${commandTokens[2]}' looks like a variable.`);
-            return ['RUN', getOptions().packageManager, 'run', npmCommand, '--if-present', ...commandTokens.slice(3)].join(' ');
+            return ['RUN', args.packageManager, 'run', npmCommand, '--if-present', ...commandTokens.slice(3)].join(' ');
         }
         if (!pkg.lernaPackage.scripts[npmCommand]) {
             getLogger().debug(`The npm run command '${commandTokens[2]}' was not found in the package '${pkg.name}'. Ignoring RUN due set '--if-exists' flag.`);
@@ -92,11 +92,11 @@ function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: st
     return `RUN ${command}`;
 }
 
-function applyExtendetDockerSyntaxRun(step: string, pkg: Package): string | undefined {
+function applyExtendetDockerSyntaxRun(step: string, pkg: Package, args: IGenerateArgs): string | undefined {
     const [_, ifExists, command] = step.match(isRun)!;
     const commandTokens = command.split(' ');
     if (ifExists) {
-        return applyExtendetDockerSyntaxRunIfExists(command, commandTokens, pkg);
+        return applyExtendetDockerSyntaxRunIfExists(command, commandTokens, pkg, args);
     }
     return `RUN ${command}`;
 }

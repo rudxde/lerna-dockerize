@@ -1,5 +1,5 @@
 import { promises } from 'fs';
-import { getLogger } from './logger';
+import { getLogger } from '@lerna-dockerize/logger';
 
 export async function slimPackage(file: string): Promise<string> {
     getLogger().info(`Slimming ${file}.`);
