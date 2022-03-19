@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@lerna-dockerize/generate": "0.8.4",
+    "@lerna-dockerize/init": "0.8.4",
     "@lerna-dockerize/logger": "0.8.4",
     "@lerna-dockerize/cli": "0.8.4"
   },

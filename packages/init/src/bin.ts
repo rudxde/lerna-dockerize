@@ -1,8 +1,12 @@
-import yargs from 'yargs';
-import { command } from '.';
+import { initCommand } from '.';
+import { getLogger } from '@lerna-dockerize/logger';
+import { cli } from '@lerna-dockerize/cli';
 
-yargs
-    .wrap(process.stdout.columns)
-    .command(command)
-    .demandCommand()
-    .argv;
+
+cli([
+    initCommand,
+])
+    .catch(err => {
+        getLogger().error(err);
+        process.exit(1);
+    });

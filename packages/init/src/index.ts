@@ -1,8 +1,8 @@
-import type { CommandModule } from 'yargs';
+import type { CommandModule } from '@lerna-dockerize/cli';
 import { IInitArgs } from './args';
 
 
-export const command: CommandModule<{}, IInitArgs> = {
+export const initCommand: CommandModule<{}, IInitArgs> = {
     command: 'init',
     describe: 'Initialize lerna-dockerize in your project',
     builder: {
