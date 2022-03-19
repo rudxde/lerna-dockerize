@@ -1,10 +1,12 @@
 import { Package as lernaPackage } from '@lerna/package';
 import { PackageGraph } from '@lerna/package-graph';
 import { runTopologically } from '@lerna/run-topologically';
+import { IGenerateArgs } from './args';
 import { Package } from './package';
 import { DockerStage } from './read-dockerfile';
 
 export async function irrerateDependencies(
+    args: IGenerateArgs,
     lernaPackages: lernaPackage[],
     packageGraph: PackageGraph,
     concurrency: number,
@@ -19,7 +21,7 @@ export async function irrerateDependencies(
             if (!packageGraphNode) {
                 throw new Error(`Package ${lernaPackage.name} missing in packageGraph`);
             }
-            const pkg = new Package(lernaPackage.name, lernaPackage, packageGraphNode);
+            const pkg = new Package(lernaPackage.name, lernaPackage, packageGraphNode, args);
             await pkg.loadDockerfile(defaultDockerFile);
             packages.push(pkg);
         },

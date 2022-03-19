@@ -1,12 +1,7 @@
 import 'jasmine';
 import { normalizePath } from '../src/normalize-path';
-import { loadOptions } from '../src/options';
 
 describe('normalizePath', () => {
-
-    beforeAll(async () => {
-        await loadOptions([]);
-    });
 
     it('should not change empty strings', () => {
         const input = '';

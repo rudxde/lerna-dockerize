@@ -3,13 +3,19 @@ import { getFilteredPackages } from '@lerna/filter-options';
 import { Package as LernaPackage } from '@lerna/package';
 import { promises } from 'fs';
 import { irrerateDependencies } from './itterate-dependencies';
-import { getLogger } from './logger';
-import { getOptions } from './options';
+import { getLogger } from '@lerna-dockerize/logger';
+import { IGenerateArgs } from './args';
 import { Package, PackageMap } from './package';
 import { DockerStage, readDockerfile } from './read-dockerfile';
 
 export class Dockerize extends Command {
     filteredPackages: LernaPackage[] = [];
+
+    constructor(
+        private args: IGenerateArgs,
+    ) {
+        super({ composed: '' });
+    }
 
     get requiresGit(): boolean {
         return false;
@@ -19,8 +25,8 @@ export class Dockerize extends Command {
     }
     async execute(): Promise<void> {
         try {
-            const baseDockerFile = await readDockerfile(getOptions().baseDockerfileName);
-            const templateDockerFileName = getOptions().templateDockerfileName;
+            const baseDockerFile = await readDockerfile(this.args.baseDockerfileName);
+            const templateDockerFileName = this.args.templateDockerfileName;
             let defaultDockerFile = undefined;
             if (templateDockerFileName) {
                 defaultDockerFile = await readDockerfile(templateDockerFileName);
@@ -34,11 +40,12 @@ export class Dockerize extends Command {
                 result.push(getDockerFileFromInstruction(baseStage.baseImage, baseStage.name, baseStage.plattform));
                 result.push(...baseStage.stepsBeforeInstall);
                 if (baseStage.install) {
-                    result.push(`RUN ${getOptions().packageManager} install`);
+                    result.push(`RUN ${this.args.packageManager} install`);
                     result.push(...baseStage.stepsAfterInstall);
                 }
             }
             const packages = await irrerateDependencies(
+                this.args,
                 this.filteredPackages,
                 this.packageGraph,
                 this.concurrency,
@@ -56,10 +63,10 @@ export class Dockerize extends Command {
                 result.push(...finalPackageDockerfile);
             }
 
-            if (getOptions().finalStage) {
+            if (this.args.finalStage) {
                 result.push(...(await this.createFinalStage(baseStage, packages)));
             }
-            await promises.writeFile(getOptions().outDockerfileName, result.join('\n'));
+            await promises.writeFile(this.args.outDockerfileName, result.join('\n'));
         } catch (err) {
             getLogger().error(err);
             process.exit(1);
@@ -70,7 +77,7 @@ export class Dockerize extends Command {
         const result: string[] = [];
         result.push(`# final stage`);
 
-        const finalDockerfileName = getOptions().finalDockerfileName;
+        const finalDockerfileName = this.args.finalDockerfileName;
         let finalStages: DockerStage[] = [
             {
                 baseImage: baseStage.name!,

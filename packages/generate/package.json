@@ -1,5 +1,5 @@
 {
-  "name": "@lerna-dockerize/init",
+  "name": "@lerna-dockerize/generate",
   "version": "0.8.4",
   "description": "A dockerfile generator for lerna projects",
   "keywords": [
@@ -23,25 +23,27 @@
   "repository": "https://github.com/rudxde/lerna-dockerize",
   "bugs": "https://github.com/rudxde/lerna-dockerize",
   "bin": {
-    "lerna-dockerize-init": "./bin"
+    "lerna-dockerize-generate": "./bin"
   },
   "dependencies": {
-    "chalk": "^5.0.0",
-    "inquirer": "^8.2.0",
+    "@lerna-dockerize/logger": "0.8.4",
+    "@lerna-dockerize/cli": "0.8.4",
+    "@lerna/command": "^4.0.0",
+    "@lerna/filter-options": "^4.0.0",
+    "@lerna/project": "^4.0.0",
+    "@lerna/run-topologically": "^4.0.0",
     "logform": "^2.2.0",
-    "ora": "^6.0.1",
     "winston": "^3.3.3",
-    "yargs": "^17.0.1"
+    "yargs-parser": "^21.0.1"
   },
   "devDependencies": {
-    "@types/inquirer": "^8.2.0",
-    "@types/jasmine": "^4.0.0",
-    "@types/node": "^17.0.17",
+    "@types/jasmine": "^3.6.9",
+    "@types/node": "^17.0.5",
     "@types/npm-package-arg": "^6.1.0",
-    "@types/yargs": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^5.11.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.8.1",
     "@typescript-eslint/parser": "^4.22.0",
+    "@types/yargs-parser": "^21.0.0",
     "eslint": "^7.24.0",
     "jasmine": "^4.0.2",
     "nyc": "^15.1.0",
@@ -57,8 +59,7 @@
   "files": [
     "package*.json",
     "README.md",
-    "dist/**",
-    "templates/**"
+    "dist/**"
   ],
   "license": "Apache-2.0"
 }

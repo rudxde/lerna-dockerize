@@ -1,4 +1,4 @@
-import { getLogger } from './logger';
+import { getLogger } from '@lerna-dockerize/logger';
 import { PackageMap } from './package';
 
 function getDependenciesRecursive(dependenciesFrom: string, packageMap: PackageMap, ignoreDevDependencies: boolean): string[] {
