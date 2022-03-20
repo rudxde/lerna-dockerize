@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/rudxde/lerna-dockerize/compare/v0.8.4...v0.9.0) (2022-03-20)
+
+
+### Bug Fixes
+
+* **generate:** fix typos ([c762010](https://github.com/rudxde/lerna-dockerize/commit/c7620100c07505e593f28d2f72d5a171244f4748))
+* **init:** linting issues ([015764f](https://github.com/rudxde/lerna-dockerize/commit/015764f440d90bcc45fe3bc44f160af72b2fcba1))
+* **init:** path of templates ([007541a](https://github.com/rudxde/lerna-dockerize/commit/007541a475ce9da0ce8ae50ea59f09d45d21ccc4))
+
+
+### Features
+
+* **cli:** make default command dynamic ([886aa19](https://github.com/rudxde/lerna-dockerize/commit/886aa19ad4f603d4d3ba2ca0e169b76e7c464ae0))
+* **generate:** extract generate code into separate module [#271](https://github.com/rudxde/lerna-dockerize/issues/271) ([b78217d](https://github.com/rudxde/lerna-dockerize/commit/b78217d0da06a58515e3e54027cb084413a3b390))
+* **init:** add description to options ([d4ec08f](https://github.com/rudxde/lerna-dockerize/commit/d4ec08f83604dd6e215591504e93f3956542924f))
+* **init:** add entries to .gitignore ([47bc39f](https://github.com/rudxde/lerna-dockerize/commit/47bc39fcba5f977d7ae484c730c37a15c9c3e163))
+* **init:** add first implementation ([486fbe5](https://github.com/rudxde/lerna-dockerize/commit/486fbe5ae81d07336d38d2f7632d10443587427f))
+* **init:** add hint to start lerna-dockerize ([8d18a35](https://github.com/rudxde/lerna-dockerize/commit/8d18a35fc7b921668a15698fd7b044fe54f7ab0d))
+* **init:** add lerna dockerize script on init ([2cee74f](https://github.com/rudxde/lerna-dockerize/commit/2cee74fab5411e45e1dddd90b2f5cfc6671d0152))
+* **init:** add module ([6dd22f9](https://github.com/rudxde/lerna-dockerize/commit/6dd22f9b6b6fc7b71507afab0712fe50b601377d))
+* **init:** add ora spinner ([e86d494](https://github.com/rudxde/lerna-dockerize/commit/e86d4949c8123aaa2f9e3c1f1a2259279a7a02bd))
+* **init:** include templates in npm package ([b51a8eb](https://github.com/rudxde/lerna-dockerize/commit/b51a8eb0941012fdba1d43f5ae95b2b28d6f1f2c))
+* **lerna-dockerize:** add init command to main cli ([a1ba0a0](https://github.com/rudxde/lerna-dockerize/commit/a1ba0a09cdd8b36dc10e70a47bddde8c1ba63f99)), closes [#269](https://github.com/rudxde/lerna-dockerize/issues/269)
+
+
+
+
+
 ## [0.8.4](https://github.com/rudxde/lerna-dockerize/compare/v0.8.3...v0.8.4) (2022-01-15)
 
 **Note:** Version bump only for package root

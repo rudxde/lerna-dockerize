@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/rudxde/lerna-dockerize/compare/v0.8.4...v0.9.0) (2022-03-20)
+
+
+### Bug Fixes
+
+* **generate:** fix typos ([c762010](https://github.com/rudxde/lerna-dockerize/commit/c7620100c07505e593f28d2f72d5a171244f4748))
+
+
+### Features
+
+* **cli:** make default command dynamic ([886aa19](https://github.com/rudxde/lerna-dockerize/commit/886aa19ad4f603d4d3ba2ca0e169b76e7c464ae0))
+* **generate:** extract generate code into separate module [#271](https://github.com/rudxde/lerna-dockerize/issues/271) ([b78217d](https://github.com/rudxde/lerna-dockerize/commit/b78217d0da06a58515e3e54027cb084413a3b390))
+
+
+
+
+
 ## [0.7.1](https://github.com/rudxde/lerna-dockerize/compare/v0.7.0...v0.7.1) (2021-08-16)
 
 **Note:** Version bump only for package lerna-dockerize
