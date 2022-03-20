@@ -27,14 +27,14 @@ describe('slimPackage', () => {
                 pear: 'latest',
             },
         };
-        const extendetPackage = {
+        const extendedPackage = {
             ...slimmedPackage,
             scripts: {
                 start: 'npm run loop',
                 loop: 'npm start',
             },
         };
-        this.readFileSpy.and.returnValue(JSON.stringify(extendetPackage));
+        this.readFileSpy.and.returnValue(JSON.stringify(extendedPackage));
         const packageDir = './somewhere';
         const packageFilePath = `${packageDir}/package.json`;
         const slimPackageFilePath = `${packageDir}/package-slim.json`;

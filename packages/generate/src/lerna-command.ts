@@ -2,7 +2,7 @@ import { Command } from '@lerna/command';
 import { getFilteredPackages } from '@lerna/filter-options';
 import { Package as LernaPackage } from '@lerna/package';
 import { promises } from 'fs';
-import { irrerateDependencies } from './itterate-dependencies';
+import { iterateDependencies } from './iterate-dependencies';
 import { getLogger } from '@lerna-dockerize/logger';
 import { IGenerateArgs } from './args';
 import { Package, PackageMap } from './package';
@@ -37,14 +37,14 @@ export class Dockerize extends Command {
 
             const result: string[] = [];
             for (let baseStage of baseDockerFile) {
-                result.push(getDockerFileFromInstruction(baseStage.baseImage, baseStage.name, baseStage.plattform));
+                result.push(getDockerFileFromInstruction(baseStage.baseImage, baseStage.name, baseStage.platform));
                 result.push(...baseStage.stepsBeforeInstall);
                 if (baseStage.install) {
                     result.push(`RUN ${this.args.packageManager} install`);
                     result.push(...baseStage.stepsAfterInstall);
                 }
             }
-            const packages = await irrerateDependencies(
+            const packages = await iterateDependencies(
                 this.args,
                 this.filteredPackages,
                 this.packageGraph,
@@ -97,7 +97,7 @@ export class Dockerize extends Command {
         }
 
         for (let finalStage of finalStages) {
-            result.push(getDockerFileFromInstruction(finalStage.baseImage, finalStage.name, finalStage.plattform));
+            result.push(getDockerFileFromInstruction(finalStage.baseImage, finalStage.name, finalStage.platform));
             result.push(...finalStage.stepsBeforeInstall);
             if (finalStage.install) {
                 for (let pkg of packages) {
@@ -110,10 +110,10 @@ export class Dockerize extends Command {
     }
 }
 
-export function getDockerFileFromInstruction(baseImage: string, stageName?: string, plattform?: string): string {
+export function getDockerFileFromInstruction(baseImage: string, stageName?: string, platform?: string): string {
     return [
         'FROM',
-        ...(plattform ? [`--platform=${plattform}`] : []),
+        ...(platform ? [`--platform=${platform}`] : []),
         baseImage,
         ...(stageName ? ['as', stageName] : []),
     ].join(' ');

@@ -5,7 +5,7 @@ import { IGenerateArgs } from './args';
 import { Package } from './package';
 import { DockerStage } from './read-dockerfile';
 
-export async function irrerateDependencies(
+export async function iterateDependencies(
     args: IGenerateArgs,
     lernaPackages: lernaPackage[],
     packageGraph: PackageGraph,

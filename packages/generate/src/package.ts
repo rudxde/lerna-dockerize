@@ -6,7 +6,7 @@ import { join as joinPath, relative } from 'path';
 import { getDependenciesTransitive } from './get-dependencies-transitive';
 import { normalizePath } from './normalize-path';
 import { IGenerateArgs } from './args';
-import { applyExtendetDockerSyntax } from './extendet-docker-syntax';
+import { applyExtendedDockerSyntax } from './extended-docker-syntax';
 import { getLogger } from '@lerna-dockerize/logger';
 import { getDockerFileFromInstruction } from './lerna-command';
 
@@ -110,12 +110,12 @@ export class Package {
             }
             const addPrepareStage = this.args.addPrepareStages && this.stageHasInstall(stage);
             if (addPrepareStage) {
-                result.push(getDockerFileFromInstruction(baseImage, stage.prepareStageName, stage.plattform));
+                result.push(getDockerFileFromInstruction(baseImage, stage.prepareStageName, stage.platform));
             } else {
-                result.push(getDockerFileFromInstruction(baseImage, stage.name!, stage.plattform));
+                result.push(getDockerFileFromInstruction(baseImage, stage.name!, stage.platform));
             }
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...(await applyExtendetDockerSyntax(stage.stepsBeforeInstall, this, this.args)));
+            result.push(...(await applyExtendedDockerSyntax(stage.stepsBeforeInstall, this, this.args)));
             if (!this.stageHasInstall(stage)) {
                 continue;
             }
@@ -162,13 +162,13 @@ export class Package {
             ].join(' '));
 
             if (addPrepareStage) {
-                result.push(getDockerFileFromInstruction(stage.prepareStageName!, stage.name!, stage.plattform));
+                result.push(getDockerFileFromInstruction(stage.prepareStageName!, stage.name!, stage.platform));
             }
 
             result.push(...dependencyCopyContent);
 
             result.push(`WORKDIR ${this.dockerWorkingDir}`);
-            result.push(...(await applyExtendetDockerSyntax(stage.stepsAfterInstall, this, this.args)));
+            result.push(...(await applyExtendedDockerSyntax(stage.stepsAfterInstall, this, this.args)));
         }
         return result;
     }
@@ -178,7 +178,7 @@ export class Package {
         return {
             baseImage: stage.baseImage,
             name: stageName,
-            plattform: stage.plattform,
+            platform: stage.platform,
             prepareStageName: this.args.addPrepareStages ? `${stageName}_prepare` : undefined,
             originalName: stage.name,
             stepsBeforeInstall: [...stage.stepsBeforeInstall],

@@ -34,7 +34,7 @@ describe('readDockerfile', () => {
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'nginx:latest',
-                plattform: undefined,
+                platform: undefined,
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
@@ -53,7 +53,7 @@ describe('readDockerfile', () => {
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'some.registry.com/somewhere/something/nginx:latest',
-                plattform: undefined,
+                platform: undefined,
                 name: undefined,
                 stepsBeforeInstall: [],
                 stepsAfterInstall: [],
@@ -61,14 +61,14 @@ describe('readDockerfile', () => {
             }]);
         });
 
-        it('should read stage with custom plattform', async function (this: ReadDockerfileThisContext) {
+        it('should read stage with custom platform', async function (this: ReadDockerfileThisContext) {
             this.fsReadFile.and.resolveTo([
                 'FROM --platform=arm/64 nginx:latest',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'nginx:latest',
-                plattform: 'arm/64',
+                platform: 'arm/64',
                 name: undefined,
                 stepsBeforeInstall: [],
                 stepsAfterInstall: [],
@@ -86,7 +86,7 @@ describe('readDockerfile', () => {
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'nginx:latest',
-                plattform: undefined,
+                platform: undefined,
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
@@ -108,7 +108,7 @@ describe('readDockerfile', () => {
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'nginx:latest',
-                plattform: undefined,
+                platform: undefined,
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
@@ -130,7 +130,7 @@ describe('readDockerfile', () => {
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'nginx:latest',
-                plattform: undefined,
+                platform: undefined,
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm run prepare'],
@@ -152,7 +152,7 @@ describe('readDockerfile', () => {
             const result = await readDockerfile('Dockerfile');
             expect(result).toEqual([{
                 baseImage: 'nginx:latest',
-                plattform: undefined,
+                platform: undefined,
                 name: undefined,
                 stepsBeforeInstall: ['COPY ./file ./somewhere'],
                 stepsAfterInstall: ['RUN npm i lerna'],
@@ -178,7 +178,7 @@ describe('readDockerfile', () => {
             expect(result).toEqual([
                 {
                     baseImage: 'node:14',
-                    plattform: undefined,
+                    platform: undefined,
                     name: 'build',
                     stepsBeforeInstall: ['COPY ./file ./somewhere'],
                     stepsAfterInstall: ['RUN npm run build'],
@@ -190,7 +190,7 @@ describe('readDockerfile', () => {
                 },
                 {
                     baseImage: 'nginx:latest',
-                    plattform: undefined,
+                    platform: undefined,
                     name: undefined,
                     stepsBeforeInstall: [],
                     stepsAfterInstall: ['ENTRYPOINT ["entrypoint.sh"]'],

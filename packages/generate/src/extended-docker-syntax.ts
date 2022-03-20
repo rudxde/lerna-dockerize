@@ -9,14 +9,14 @@ import { IGenerateArgs } from './args';
 const isCopy = /COPY\s+(--from=\S*\s+)?(--chown=\S*\s+)?(--if-exists\s+)?(--slim\s+)?(.*)\s+(.*)/s;
 const isRun = /RUN( --if-exists)? (.+)/s;
 
-export async function applyExtendetDockerSyntax(steps: string[], pkg: Package, args: IGenerateArgs): Promise<string[]> {
+export async function applyExtendedDockerSyntax(steps: string[], pkg: Package, args: IGenerateArgs): Promise<string[]> {
     const result: string[] = [];
     for (let step of steps) {
         const isCopyMatch = step.match(isCopy);
         const isRunMatch = step.match(isRun);
         const transformedStep =
-            isCopyMatch ? await applyExtendetDockerSyntaxCopy(step, pkg) :
-                isRunMatch ? applyExtendetDockerSyntaxRun(step, pkg, args) :
+            isCopyMatch ? await applyExtendedDockerSyntaxCopy(step, pkg) :
+                isRunMatch ? applyExtendedDockerSyntaxRun(step, pkg, args) :
                     step;
         if (transformedStep) {
             result.push(transformedStep);
@@ -25,7 +25,7 @@ export async function applyExtendetDockerSyntax(steps: string[], pkg: Package, a
     return result;
 }
 
-async function applyExtendetDockerSyntaxCopy(step: string, pkg: Package): Promise<string | undefined> {
+async function applyExtendedDockerSyntaxCopy(step: string, pkg: Package): Promise<string | undefined> {
     const [_, fromStage, chown, ifExistsFlag, slimFlag, filesList, destination] = step.match(isCopy)!;
     if (fromStage) {
         const [_, fromStageName] = fromStage.match(/--from=(\S*)/) ?? [];
@@ -64,7 +64,7 @@ async function slimCopy(chown: string | undefined, files: string[], destination:
     return `COPY ${chown || ''} ${source} ${destination}`;
 }
 
-function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: string[], pkg: Package, args: IGenerateArgs): string | undefined {
+function applyExtendedDockerSyntaxRunIfExists(command: string, commandTokens: string[], pkg: Package, args: IGenerateArgs): string | undefined {
     if (command.startsWith('npm run')) {
         const npmCommand = commandTokens[2];
         if(npmCommand.startsWith('$')) {
@@ -92,11 +92,11 @@ function applyExtendetDockerSyntaxRunIfExists(command: string, commandTokens: st
     return `RUN ${command}`;
 }
 
-function applyExtendetDockerSyntaxRun(step: string, pkg: Package, args: IGenerateArgs): string | undefined {
+function applyExtendedDockerSyntaxRun(step: string, pkg: Package, args: IGenerateArgs): string | undefined {
     const [_, ifExists, command] = step.match(isRun)!;
     const commandTokens = command.split(' ');
     if (ifExists) {
-        return applyExtendetDockerSyntaxRunIfExists(command, commandTokens, pkg, args);
+        return applyExtendedDockerSyntaxRunIfExists(command, commandTokens, pkg, args);
     }
     return `RUN ${command}`;
 }
