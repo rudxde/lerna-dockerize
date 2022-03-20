@@ -27,6 +27,14 @@ Inside the [test/integration](./packages/lerna-dockerize/test/integration) folde
 
 ## Project setup
 
+From version 0.9.0 you can use the init command to setup an new Project. You need to have setup lerna, afterwards you can run 
+```
+npx lerna-dockerize init
+```
+this will install lerna dockerize and setup the required configs.
+
+### Manual setup
+
 You will need at least two dockerfiles.
 
 ### Base Dockerfile
