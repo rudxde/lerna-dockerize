@@ -2,8 +2,11 @@ import { getLogger, initLogger, loggerYargsOptions } from '@lerna-dockerize/logg
 import { existsSync, promises } from 'fs';
 import yargs, { CommandModule } from 'yargs';
 
+export type { CommandModule } from 'yargs';
+
 export async function cli(
     commands: CommandModule<{}, any>[],
+    defaultCommand: string,
 ): Promise<void> {
     let config = {};
     const lernaConfigPath = 'lerna.json';
@@ -25,12 +28,19 @@ export async function cli(
         });
 
     for (const command of commands) {
-        builder = builder.command(command);
+        let yargsCommand: CommandModule<{}, any> = command;
+        if (command.command) {
+            if (typeof command.command === 'string' && command.command === defaultCommand) {
+                yargsCommand.command = [command.command, '$0'];
+            }
+            if (Array.isArray(command.command) && command.command[0] === defaultCommand) {
+                yargsCommand.command = [...command.command, '$0'];
+            }
+        }
+        builder = builder.command(yargsCommand);
     }
 
     builder
         .demandCommand()
         .argv;
 }
-
-export { CommandModule } from 'yargs';

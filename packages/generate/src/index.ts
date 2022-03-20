@@ -2,7 +2,7 @@ import type { CommandModule } from '@lerna-dockerize/cli';
 import { IGenerateArgs } from './args';
 
 export const generateCommand: CommandModule<any, IGenerateArgs> = {
-    command: ['generate', '$0'],
+    command: 'generate',
     describe: 'Generates the lerna-dockerize dockerfile',
     builder: {
         baseDockerfileName:  {
