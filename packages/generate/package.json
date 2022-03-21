@@ -37,7 +37,7 @@
     "yargs-parser": "^21.0.1"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.6.9",
+    "@types/jasmine": "^4.0.0",
     "@types/node": "^17.0.5",
     "@types/npm-package-arg": "^6.1.0",
     "@types/yargs-parser": "^21.0.0",
