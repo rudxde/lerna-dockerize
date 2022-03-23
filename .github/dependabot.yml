@@ -20,7 +20,31 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
+    directory: "/pacakges/cli/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    labels:
+      - dependency
+
+  - package-ecosystem: "npm"
+    directory: "/pacakges/generate/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    labels:
+      - dependency
+
+  - package-ecosystem: "npm"
     directory: "/pacakges/init/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    labels:
+      - dependency
+
+  - package-ecosystem: "npm"
+    directory: "/pacakges/logger/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
