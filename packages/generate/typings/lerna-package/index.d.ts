@@ -52,14 +52,7 @@ declare module '@lerna/package' {
         */
         constructor(pkg: RawManifest, location: string, rootPath?: string);
 
-        /**
-         * Create a Package instance from parameters, possibly reusing existing instance.
-         * @param {string|Package|RawManifest} ref A path to a package.json file, Package instance, or JSON object
-         * @param {string} [dir] If `ref` is a JSON object, this is the location of the manifest
-         * @returns {Package}
-         */
-        static lazy(ref: string | Package | RawManifest, dir?: string): Package;
-
+        
         get location(): string;
         get private(): boolean;
         get resolved(): any;
@@ -72,14 +65,23 @@ declare module '@lerna/package' {
         get manifestLocation(): string;
         get nodeModulesLocation(): string;
         get __isLernaPackage(): boolean;
-        set version(arg: string);
         get version(): string;
-        set contents(arg: any);
         get contents(): any;
         get dependencies(): Record<string, string>;
         get devDependencies(): Record<string, string>;
         get optionalDependencies(): Record<string, string>;
         get peerDependencies(): Record<string, string>;
+        set version(arg: string);
+        set contents(arg: any);
+        
+        /**
+         * Create a Package instance from parameters, possibly reusing existing instance.
+         * @param {string|Package|RawManifest} ref A path to a package.json file, Package instance, or JSON object
+         * @param {string} [dir] If `ref` is a JSON object, this is the location of the manifest
+         * @returns {Package}
+         */
+        static lazy(ref: string | Package | RawManifest, dir?: string): Package;
+
         /**
          * Map-like retrieval of arbitrary values
          * @template {keyof RawManifest} K

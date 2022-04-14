@@ -9,10 +9,10 @@ declare module '@lerna/command' {
         execOpts: import('@lerna/child-process').ExecOpts;
         packageGraph: import('@lerna/package-graph').PackageGraph;
         constructor(_argv: any);
-        then(onResolved: any, onRejected: any): any;
-        catch(onRejected: any): any;
         get requiresGit(): boolean;
         get otherCommandConfigs(): any[];
+        then(onResolved: any, onRejected: any): any;
+        catch(onRejected: any): any;
         configureEnvironment(): void;
         configureOptions(): void;
         configureProperties(): void;

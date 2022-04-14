@@ -24,6 +24,14 @@ export class Package {
         private args: IGenerateArgs,
     ) { }
 
+    get relativePath(): string {
+        return normalizePath(relative(this.lernaPackage.rootPath, this.lernaPackage.location));
+    }
+
+    get dockerWorkingDir(): string {
+        return this.args.dockerfileWorkingDir + this.relativePath;
+    }
+
     async findDockerfile(): Promise<string | undefined> {
         if (!this.lernaPackage) {
             throw new Error(`The lerna package is missing for the dependency ${this.name}`);
@@ -52,14 +60,6 @@ export class Package {
         }
         this.dockerFile = this.dockerFile!.map((stage, i) => this.scopeDockerStage(stage, i));
         return this.dockerFile!;
-    }
-
-    get relativePath(): string {
-        return normalizePath(relative(this.lernaPackage.rootPath, this.lernaPackage.location));
-    }
-
-    get dockerWorkingDir(): string {
-        return this.args.dockerfileWorkingDir + this.relativePath;
     }
 
     getPackageStageNamePrefix(): string {
