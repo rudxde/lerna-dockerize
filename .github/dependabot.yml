@@ -12,7 +12,7 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
-    directory: "/pacakges/lerna-dockerize/"
+    directory: "/packages/lerna-dockerize/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -20,7 +20,7 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
-    directory: "/pacakges/cli/"
+    directory: "/packages/cli/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -28,7 +28,7 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
-    directory: "/pacakges/generate/"
+    directory: "/packages/generate/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -36,7 +36,7 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
-    directory: "/pacakges/init/"
+    directory: "/packages/init/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -44,7 +44,7 @@ updates:
       - dependency
 
   - package-ecosystem: "npm"
-    directory: "/pacakges/logger/"
+    directory: "/packages/logger/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
