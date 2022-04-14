@@ -1,6 +1,6 @@
 {
   "name": "lerna-dockerize",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A dockerfile generator for lerna projects",
   "keywords": [
     "lerna",
@@ -26,10 +26,10 @@
     "lerna-dockerize": "./bin"
   },
   "dependencies": {
-    "@lerna-dockerize/cli": "0.9.1",
-    "@lerna-dockerize/generate": "0.9.1",
-    "@lerna-dockerize/init": "0.9.1",
-    "@lerna-dockerize/logger": "0.9.1"
+    "@lerna-dockerize/cli": "0.9.2",
+    "@lerna-dockerize/generate": "0.9.2",
+    "@lerna-dockerize/init": "0.9.2",
+    "@lerna-dockerize/logger": "0.9.2"
   },
   "devDependencies": {
     "@types/jasmine": "^4.0.0",

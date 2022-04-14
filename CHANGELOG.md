@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.2](https://github.com/rudxde/lerna-dockerize/compare/v0.9.1...v0.9.2) (2022-04-14)
+
+
+### Bug Fixes
+
+* **generate:** member-ordering linting errors ([62e260c](https://github.com/rudxde/lerna-dockerize/commit/62e260c9abb874aba8b48b9870dae7cd2a064197))
+
+
+
+
+
 ## [0.9.1](https://github.com/rudxde/lerna-dockerize/compare/v0.9.0...v0.9.1) (2022-04-02)
 
 **Note:** Version bump only for package root
