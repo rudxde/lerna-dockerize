@@ -19,12 +19,18 @@ export interface DockerStage {
     install?: IInstallOptions;
 }
 
+export interface Dockerfile {
+    stages: DockerStage[];
+    preStage: string[];
+}
 
-export async function readDockerfile(path: string): Promise<DockerStage[]> {
+
+export async function readDockerfile(path: string): Promise<Dockerfile> {
     const dockerfile = (await promises.readFile(path)).toString();
     const steps = splitInSteps(dockerfile);
     const result = [];
     let currentStep = 0;
+    let preStage: string[] = [];
     while (true) {
         const readStageResult = readStage(steps, currentStep);
         if (!readStageResult) {
@@ -32,19 +38,26 @@ export async function readDockerfile(path: string): Promise<DockerStage[]> {
         }
         currentStep = readStageResult.endIndex + 1;
         result.push(readStageResult.stage);
+        if (preStage.length === 0 && readStageResult.preStage.length > 0) {
+            preStage = readStageResult.preStage;
+        }
     }
     if (result.length === 0) {
         getLogger().warn(`The dockerfile '${path}' appears to be empty.`);
     }
-    return result;
+    return {
+        preStage: preStage,
+        stages: result,
+    };
 }
 
-export function readStage(steps: string[], startIndex: number): { stage: DockerStage; endIndex: number } | undefined {
+export function readStage(steps: string[], startIndex: number): { stage: DockerStage; endIndex: number; preStage: string[] } | undefined {
     let i = startIndex;
     let baseImage;
     let stageName;
     let platform;
-    const isStageFromClause = /(FROM|from)(\s--platform=(\S+))? ([a-zA-Z0-9:_\-@.\/]*)( as ([a-zA-Z0-9:_-]*))?/;
+    const preStage = [];
+    const isStageFromClause = /(FROM|from)(\s--platform=(\S+))? ([a-zA-Z0-9:_\-@.\/${}]*)( as ([a-zA-Z0-9:_-]*))?/;
     for (; ; i++) {
         if (i >= steps.length) {
             return undefined;
@@ -57,6 +70,7 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             i++;
             break;
         }
+        preStage.push(steps[i]);
     }
     const stepsBeforeInstall: string[] = [];
     const stepsAfterInstall: string[] = [];
@@ -93,6 +107,7 @@ export function readStage(steps: string[], startIndex: number): { stage: DockerS
             stepsAfterInstall,
             install: installHit,
         },
+        preStage,
     };
 }
 

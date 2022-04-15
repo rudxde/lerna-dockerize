@@ -1,0 +1,9 @@
+ARG SHOULD_BE_IGNORED
+
+FROM base as build
+
+COPY --slim ./package.json ./
+RUN npm install
+
+COPY ./package.json ./
+RUN npm run build

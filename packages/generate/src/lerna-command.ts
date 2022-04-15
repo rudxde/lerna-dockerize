@@ -32,11 +32,13 @@ export class Dockerize extends Command {
                 defaultDockerFile = await readDockerfile(templateDockerFileName);
             }
 
-            const baseStage = baseDockerFile[baseDockerFile.length - 1];
+            const baseStage = baseDockerFile.stages[baseDockerFile.stages.length - 1];
             baseStage.name = 'base';
 
-            const result: string[] = [];
-            for (let baseStage of baseDockerFile) {
+            const result: string[] = [
+                ...baseDockerFile.preStage,
+            ];
+            for (let baseStage of baseDockerFile.stages) {
                 result.push(getDockerFileFromInstruction(baseStage.baseImage, baseStage.name, baseStage.platform));
                 result.push(...baseStage.stepsBeforeInstall);
                 if (baseStage.install) {
@@ -93,7 +95,7 @@ export class Dockerize extends Command {
 
         // overwrite final docker stage
         if (finalDockerfileName) {
-            finalStages = await readDockerfile(finalDockerfileName);
+            finalStages = (await readDockerfile(finalDockerfileName)).stages;
         }
 
         for (let finalStage of finalStages) {

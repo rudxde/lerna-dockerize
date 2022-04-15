@@ -21,7 +21,10 @@ describe('readDockerfile', () => {
             getLogger().level = 'error';
             const result = await readDockerfile('Dockerfile');
             getLogger().level = oldLogLevel;
-            expect(result).toEqual([]);
+            expect(result).toEqual({
+                stages: [],
+                preStage: [],
+            });
         });
 
         it('should return one stage from dockerfile', async function (this: ReadDockerfileThisContext) {
@@ -32,18 +35,51 @@ describe('readDockerfile', () => {
                 'RUN npm run prepare',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'nginx:latest',
-                platform: undefined,
-                name: undefined,
-                stepsBeforeInstall: ['COPY ./file ./somewhere'],
-                stepsAfterInstall: ['RUN npm run prepare'],
-                install: {
-                    ci: undefined,
-                    ignoreScripts: false,
-                    onlyProduction: false,
-                },
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'nginx:latest',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                    stepsAfterInstall: ['RUN npm run prepare'],
+                    install: {
+                        ci: undefined,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
+                }],
+            });
+        });
+
+        it('should return one stage and pre stage args with  from dockerfile', async function (this: ReadDockerfileThisContext) {
+            this.fsReadFile.and.resolveTo([
+                'ARG FOO=bar',
+                'ARG version=1.0.0',
+                'FROM nginx:${version}',
+                'COPY ./file ./somewhere',
+                'RUN npm i',
+                'RUN npm run prepare',
+            ].join('\n'));
+            const result = await readDockerfile('Dockerfile');
+            expect(result).toEqual({
+                preStage: [
+                    'ARG FOO=bar',
+                    'ARG version=1.0.0',
+                ],
+                stages: [{
+                    baseImage: 'nginx:${version}',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                    stepsAfterInstall: ['RUN npm run prepare'],
+                    install: {
+                        ci: undefined,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
+                }],
+            });
         });
 
         it('should read stage with custom registry base image', async function (this: ReadDockerfileThisContext) {
@@ -51,14 +87,17 @@ describe('readDockerfile', () => {
                 'FROM some.registry.com/somewhere/something/nginx:latest',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'some.registry.com/somewhere/something/nginx:latest',
-                platform: undefined,
-                name: undefined,
-                stepsBeforeInstall: [],
-                stepsAfterInstall: [],
-                install: undefined,
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'some.registry.com/somewhere/something/nginx:latest',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: [],
+                    stepsAfterInstall: [],
+                    install: undefined,
+                }],
+            });
         });
 
         it('should read stage with custom platform', async function (this: ReadDockerfileThisContext) {
@@ -66,14 +105,17 @@ describe('readDockerfile', () => {
                 'FROM --platform=arm/64 nginx:latest',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'nginx:latest',
-                platform: 'arm/64',
-                name: undefined,
-                stepsBeforeInstall: [],
-                stepsAfterInstall: [],
-                install: undefined,
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'nginx:latest',
+                    platform: 'arm/64',
+                    name: undefined,
+                    stepsBeforeInstall: [],
+                    stepsAfterInstall: [],
+                    install: undefined,
+                }],
+            });
         });
 
         it('should return one stage from dockerfile with yarn install', async function (this: ReadDockerfileThisContext) {
@@ -84,18 +126,21 @@ describe('readDockerfile', () => {
                 'RUN npm run prepare',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'nginx:latest',
-                platform: undefined,
-                name: undefined,
-                stepsBeforeInstall: ['COPY ./file ./somewhere'],
-                stepsAfterInstall: ['RUN npm run prepare'],
-                install: {
-                    ci: undefined,
-                    ignoreScripts: false,
-                    onlyProduction: false,
-                },
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'nginx:latest',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                    stepsAfterInstall: ['RUN npm run prepare'],
+                    install: {
+                        ci: undefined,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
+                }],
+            });
         });
 
         it('should return one stage from dockerfile with install parameters', async function (this: ReadDockerfileThisContext) {
@@ -106,18 +151,21 @@ describe('readDockerfile', () => {
                 'RUN npm run prepare',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'nginx:latest',
-                platform: undefined,
-                name: undefined,
-                stepsBeforeInstall: ['COPY ./file ./somewhere'],
-                stepsAfterInstall: ['RUN npm run prepare'],
-                install: {
-                    ci: true,
-                    ignoreScripts: true,
-                    onlyProduction: true,
-                },
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'nginx:latest',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                    stepsAfterInstall: ['RUN npm run prepare'],
+                    install: {
+                        ci: true,
+                        ignoreScripts: true,
+                        onlyProduction: true,
+                    },
+                }],
+            });
         });
 
         it('should return one stage from dockerfile with ci install parameter', async function (this: ReadDockerfileThisContext) {
@@ -128,18 +176,21 @@ describe('readDockerfile', () => {
                 'RUN npm run prepare',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'nginx:latest',
-                platform: undefined,
-                name: undefined,
-                stepsBeforeInstall: ['COPY ./file ./somewhere'],
-                stepsAfterInstall: ['RUN npm run prepare'],
-                install: {
-                    ci: true,
-                    ignoreScripts: false,
-                    onlyProduction: false,
-                },
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'nginx:latest',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                    stepsAfterInstall: ['RUN npm run prepare'],
+                    install: {
+                        ci: true,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
+                }],
+            });
         });
 
         it('should pass npm i of dependencies into dockerfile', async function (this: ReadDockerfileThisContext) {
@@ -150,18 +201,21 @@ describe('readDockerfile', () => {
                 'RUN npm i lerna',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([{
-                baseImage: 'nginx:latest',
-                platform: undefined,
-                name: undefined,
-                stepsBeforeInstall: ['COPY ./file ./somewhere'],
-                stepsAfterInstall: ['RUN npm i lerna'],
-                install: {
-                    ci: true,
-                    ignoreScripts: false,
-                    onlyProduction: false,
-                },
-            }]);
+            expect(result).toEqual({
+                preStage: [],
+                stages: [{
+                    baseImage: 'nginx:latest',
+                    platform: undefined,
+                    name: undefined,
+                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                    stepsAfterInstall: ['RUN npm i lerna'],
+                    install: {
+                        ci: true,
+                        ignoreScripts: false,
+                        onlyProduction: false,
+                    },
+                }],
+            });
         });
 
         it('should return multiple stages from dockerfile', async function (this: ReadDockerfileThisContext) {
@@ -175,32 +229,35 @@ describe('readDockerfile', () => {
                 'ENTRYPOINT ["entrypoint.sh"]',
             ].join('\n'));
             const result = await readDockerfile('Dockerfile');
-            expect(result).toEqual([
-                {
-                    baseImage: 'node:14',
-                    platform: undefined,
-                    name: 'build',
-                    stepsBeforeInstall: ['COPY ./file ./somewhere'],
-                    stepsAfterInstall: ['RUN npm run build'],
-                    install: {
-                        ci: undefined,
-                        ignoreScripts: false,
-                        onlyProduction: false,
+            expect(result).toEqual({
+                preStage: [],
+                stages: [
+                    {
+                        baseImage: 'node:14',
+                        platform: undefined,
+                        name: 'build',
+                        stepsBeforeInstall: ['COPY ./file ./somewhere'],
+                        stepsAfterInstall: ['RUN npm run build'],
+                        install: {
+                            ci: undefined,
+                            ignoreScripts: false,
+                            onlyProduction: false,
+                        },
                     },
-                },
-                {
-                    baseImage: 'nginx:latest',
-                    platform: undefined,
-                    name: undefined,
-                    stepsBeforeInstall: [],
-                    stepsAfterInstall: ['ENTRYPOINT ["entrypoint.sh"]'],
-                    install: {
-                        ci: undefined,
-                        ignoreScripts: false,
-                        onlyProduction: false,
+                    {
+                        baseImage: 'nginx:latest',
+                        platform: undefined,
+                        name: undefined,
+                        stepsBeforeInstall: [],
+                        stepsAfterInstall: ['ENTRYPOINT ["entrypoint.sh"]'],
+                        install: {
+                            ci: undefined,
+                            ignoreScripts: false,
+                            onlyProduction: false,
+                        },
                     },
-                },
-            ]);
+                ],
+            });
         });
 
     });

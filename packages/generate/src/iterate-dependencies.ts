@@ -3,7 +3,7 @@ import { PackageGraph } from '@lerna/package-graph';
 import { runTopologically } from '@lerna/run-topologically';
 import { IGenerateArgs } from './args';
 import { Package } from './package';
-import { DockerStage } from './read-dockerfile';
+import { Dockerfile } from './read-dockerfile';
 
 export async function iterateDependencies(
     args: IGenerateArgs,
@@ -11,7 +11,7 @@ export async function iterateDependencies(
     packageGraph: PackageGraph,
     concurrency: number,
     rejectCycles?: boolean,
-    defaultDockerFile?: DockerStage[],
+    defaultDockerFile?: Dockerfile,
 ): Promise<Package[]> {
     const packages: Package[] = [];
     await runTopologically(

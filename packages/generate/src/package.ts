@@ -1,6 +1,6 @@
 import { PackageGraphNode } from '@lerna/package-graph';
 import { Package as LernaPackage } from '@lerna/package';
-import { DockerStage, readDockerfile } from './read-dockerfile';
+import { Dockerfile, DockerStage, readDockerfile } from './read-dockerfile';
 import { promises } from 'fs';
 import { join as joinPath, relative } from 'path';
 import { getDependenciesTransitive } from './get-dependencies-transitive';
@@ -15,7 +15,7 @@ export type PackageMap = Map<string, Package>;
 
 export class Package {
 
-    dockerFile?: DockerStage[];
+    dockerFile?: Dockerfile;
 
     constructor(
         public name: string,
@@ -46,7 +46,7 @@ export class Package {
         return undefined;
     }
 
-    async loadDockerfile(defaultDockerFile?: DockerStage[]): Promise<DockerStage[]> {
+    async loadDockerfile(defaultDockerFile?: Dockerfile): Promise<Dockerfile> {
         const dockerFileName = await this.findDockerfile();
         if (!dockerFileName && !defaultDockerFile) {
             throw new Error(`No Dockerfile for the package ${this.name} and no default docker file was found!`);
@@ -58,7 +58,10 @@ export class Package {
             getLogger().info(`using custom dockerfile for package ${this.name}`);
             this.dockerFile = await readDockerfile(dockerFileName);
         }
-        this.dockerFile = this.dockerFile!.map((stage, i) => this.scopeDockerStage(stage, i));
+        this.dockerFile = {
+            stages: this.dockerFile!.stages.map((stage, i) => this.scopeDockerStage(stage, i)),
+            preStage: this.dockerFile!.preStage,
+        };
         return this.dockerFile!;
     }
 
@@ -76,7 +79,7 @@ export class Package {
         if (!this.args.addPrepareStages) {
             return this.getBuildStageName();
         }
-        return this.dockerFile[this.dockerFile.length - 1].prepareStageName;
+        return this.dockerFile.stages[this.dockerFile.stages.length - 1].prepareStageName;
     }
 
     getBuildStageName(): string | undefined {
@@ -87,7 +90,7 @@ export class Package {
         if (!this.dockerFile) {
             return undefined;
         }
-        return this.dockerFile[this.dockerFile.length - 1];
+        return this.dockerFile.stages[this.dockerFile.stages.length - 1];
     }
 
     stageHasInstall(stage?: DockerStage): boolean {
@@ -102,9 +105,9 @@ export class Package {
             return [];
         }
         const result: string[] = [];
-        for (let stage of this.dockerFile) {
+        for (let stage of this.dockerFile.stages) {
             let baseImage = stage.baseImage;
-            const baseImageIsLocalStage = this.dockerFile!.find(x => x.originalName === baseImage);
+            const baseImageIsLocalStage = this.dockerFile!.stages.find(x => x.originalName === baseImage);
             if (baseImageIsLocalStage) {
                 baseImage = baseImageIsLocalStage.name!;
             }

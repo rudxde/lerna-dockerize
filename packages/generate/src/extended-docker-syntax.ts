@@ -29,7 +29,7 @@ async function applyExtendedDockerSyntaxCopy(step: string, pkg: Package): Promis
     const [_, fromStage, chown, ifExistsFlag, slimFlag, filesList, destination] = step.match(isCopy)!;
     if (fromStage) {
         const [_, fromStageName] = fromStage.match(/--from=(\S*)/) ?? [];
-        const isLocalStage = pkg.dockerFile!.find(x => x.originalName === fromStageName);
+        const isLocalStage = pkg.dockerFile!.stages.find(x => x.originalName === fromStageName);
         if (isLocalStage) {
             return `COPY --from=${isLocalStage.name} ${chown || ''} ${filesList} ${destination}`;
         }

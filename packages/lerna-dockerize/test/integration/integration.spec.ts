@@ -6,7 +6,7 @@ import { deleteIfExists } from './delete-if-exists';
 
 
 describe('integration', () =>
-    ['simple', 'config-file', 'if_exists', 'custom_dockerfile', 'hoist', 'split-stages', 'npm_i_args']
+    ['simple', 'config-file', 'if_exists', 'custom_dockerfile', 'hoist', 'split-stages', 'npm_i_args', 'pre-stage']
         .forEach(testCase =>
             describe(testCase, () => {
                 afterAll(async function cleanup() {
