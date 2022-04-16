@@ -52,6 +52,10 @@ COPY ./lerna.json ./
 
 In the end a Dockerstage will be created based on the last Base Dockerfile stage contains ever package
 
+#### Global Arg's
+
+In dockerfile's it is supported to define `ARG` instructions before any `FROM` clause. ([Docker Understand how ARG and FROM interact](https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact)). This behavior is partly supported by lerna-dockerize. Only `ARG` instructions from the base dockerfile before the `FROM` instruction will be taken into account, the instructions from any other Dockerfile before the first stage/`FROM` clause will be ignored. The `ARG`'s defined in the base dockerfile will be available in any stage of any dockerfile.
+
 ### Custom package Dockerfile
 
 You can create a custom Dockerfile for each package. If a package has no Dockerfile lerna-dockerize will try to use the template Dockerfile. The Dockerfile's working directory will be set inside the package directory. You don't need to perform `lerna bootstrap` on your own. just add the line `RUN npm install` and lerna dockerize will handle the bootstrapping.
