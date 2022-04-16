@@ -10,6 +10,8 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependency
+    ignore:
+      - dependency-name: "@lerna-dockerize*"
 
   - package-ecosystem: "npm"
     directory: "/packages/lerna-dockerize/"
@@ -18,6 +20,8 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependency
+    ignore:
+      - dependency-name: "@lerna-dockerize*"
 
   - package-ecosystem: "npm"
     directory: "/packages/cli/"
@@ -26,6 +30,8 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependency
+    ignore:
+      - dependency-name: "@lerna-dockerize*"
 
   - package-ecosystem: "npm"
     directory: "/packages/generate/"
@@ -34,6 +40,8 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependency
+    ignore:
+      - dependency-name: "@lerna-dockerize*"
 
   - package-ecosystem: "npm"
     directory: "/packages/init/"
@@ -42,6 +50,8 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependency
+    ignore:
+      - dependency-name: "@lerna-dockerize*"
 
   - package-ecosystem: "npm"
     directory: "/packages/logger/"
@@ -50,3 +60,5 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependency
+    ignore:
+      - dependency-name: "@lerna-dockerize*"
