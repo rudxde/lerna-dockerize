@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.3](https://github.com/rudxde/lerna-dockerize/compare/v0.9.2...v0.9.3) (2022-04-16)
+
+
+### Bug Fixes
+
+* **generate:** keep steps before first stage of base dockerfile ([9427d3f](https://github.com/rudxde/lerna-dockerize/commit/9427d3f97bd3e6234838f7bb0417356010504c87)), closes [#350](https://github.com/rudxde/lerna-dockerize/issues/350)
+
+
+
+
+
 ## [0.9.2](https://github.com/rudxde/lerna-dockerize/compare/v0.9.1...v0.9.2) (2022-04-14)
 
 **Note:** Version bump only for package lerna-dockerize
