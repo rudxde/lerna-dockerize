@@ -1,4 +1,3 @@
-import 'jasmine';
 import { normalizePath } from '../src/normalize-path';
 
 describe('normalizePath', () => {

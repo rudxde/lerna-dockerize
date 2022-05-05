@@ -1,4 +1,3 @@
-import 'jasmine';
 import { promises } from 'fs';
 import { readStage, splitInSteps, readDockerfile } from '../src/read-dockerfile';
 import { getLogger } from '@lerna-dockerize/logger';

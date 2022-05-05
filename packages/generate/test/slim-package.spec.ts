@@ -1,4 +1,3 @@
-import 'jasmine';
 import { promises } from 'fs';
 import { slimPackage } from '../src/slim-package';
 
