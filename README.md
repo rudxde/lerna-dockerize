@@ -8,8 +8,7 @@ It generates a multistage build Dockerfile, with stages for each package.
 
 ## Software requirements
 
-The current nodejs major versions 12.x, 14.x 16.x and 17.x are supported.  
-_(With the end of live at April 30 2022, node 12 will no longer be supported)_
+The current nodejs major versions 14.x 16.x and 17.x are supported.  
 
 > Dockerfiles generated with `lerna-dockerize` work with the default docker builder, but it is recommended to use the new [Docker BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) engine. With Docker BuildKit and the use of the [`addPrepareStages`](#configuration) option, you can get more speed out of your builds.
 
