@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "target": "es2019",
-        "module": "commonjs",
+        "target": "es2020",
+        "module": "es2020",
         "lib": [
             "es2020"
         ],
@@ -19,7 +19,8 @@
         ],
         "allowJs": true,
         "checkJs": true,
-        
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
     },
     "include": [
         "src/**/*"
