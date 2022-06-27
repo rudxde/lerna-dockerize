@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.4](https://github.com/rudxde/lerna-dockerize/compare/v0.9.3...v0.9.4) (2022-06-27)
+
+
+### Reverts
+
+* Revert "chore(deps): bump @lerna/project from 4.0.0 to 5.0.0" ([1f850d3](https://github.com/rudxde/lerna-dockerize/commit/1f850d3ff1c9b42f9bd7eb44b39058c3c2067c0c))
+
+
+
+
+
 ## [0.9.3](https://github.com/rudxde/lerna-dockerize/compare/v0.9.2...v0.9.3) (2022-04-16)
 
 
