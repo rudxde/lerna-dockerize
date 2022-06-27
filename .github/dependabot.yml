@@ -12,6 +12,7 @@ updates:
       - dependency
     ignore:
       - dependency-name: "@lerna-dockerize*"
+      - dependency-name: "@lerna*"
 
   - package-ecosystem: "npm"
     directory: "/packages/lerna-dockerize/"
@@ -22,6 +23,7 @@ updates:
       - dependency
     ignore:
       - dependency-name: "@lerna-dockerize*"
+      - dependency-name: "@lerna*"
 
   - package-ecosystem: "npm"
     directory: "/packages/cli/"
@@ -32,6 +34,7 @@ updates:
       - dependency
     ignore:
       - dependency-name: "@lerna-dockerize*"
+      - dependency-name: "@lerna*"
 
   - package-ecosystem: "npm"
     directory: "/packages/generate/"
@@ -42,6 +45,7 @@ updates:
       - dependency
     ignore:
       - dependency-name: "@lerna-dockerize*"
+      - dependency-name: "@lerna*"
 
   - package-ecosystem: "npm"
     directory: "/packages/init/"
@@ -52,6 +56,7 @@ updates:
       - dependency
     ignore:
       - dependency-name: "@lerna-dockerize*"
+      - dependency-name: "@lerna*"
 
   - package-ecosystem: "npm"
     directory: "/packages/logger/"
@@ -62,3 +67,4 @@ updates:
       - dependency
     ignore:
       - dependency-name: "@lerna-dockerize*"
+      - dependency-name: "@lerna*"
