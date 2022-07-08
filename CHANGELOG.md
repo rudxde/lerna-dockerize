@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/rudxde/lerna-dockerize/compare/v0.9.5...v1.0.0) (2022-07-08)
+
+
+* feat!: update to lerna v5.1.8 ([8a18f93](https://github.com/rudxde/lerna-dockerize/commit/8a18f9318003853af4d601c41daa0e587f8e61f3))
+* feat!: drop support of node version 12 and 17 #270 ([bab367e](https://github.com/rudxde/lerna-dockerize/commit/bab367e5ff0ef7b912ac41b1cbc1c96e64147b49)), closes [#270](https://github.com/rudxde/lerna-dockerize/issues/270)
+
+
+### BREAKING CHANGES
+
+* the major version 5 of lerna will now be used
+* node 12 and 17 are no longer supported
+
+
+
+
+
 ## [0.9.5](https://github.com/rudxde/lerna-dockerize/compare/v0.9.4...v0.9.5) (2022-07-06)
 
 **Note:** Version bump only for package root
