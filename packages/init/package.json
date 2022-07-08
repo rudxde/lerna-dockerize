@@ -29,7 +29,7 @@
     "@lerna-dockerize/cli": "0.9.5",
     "@lerna-dockerize/logger": "0.9.5",
     "chalk": "^5.0.0",
-    "inquirer": "^8.2.0",
+    "inquirer": "^9.0.0",
     "logform": "^2.2.0",
     "ora": "^6.0.1",
     "winston": "^3.3.3"
