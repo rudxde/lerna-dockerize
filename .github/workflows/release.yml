@@ -21,7 +21,7 @@ jobs:
       - run: |
          git config --global user.email "ci@example.com"
          git config --global user.name "continuous integration"
-      - run: npm run version -- --create-release github
+      - run: npm run version -- major --create-release github
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: cleanup node_modules
