@@ -44,6 +44,7 @@ Create the file `Dockerfile.base` in your projects root and add the following co
 
 ```
 FROM node:14 as base
+WORKDIR /app
 COPY ./package.json ./
 RUN npm i
 COPY ./lerna.json ./
