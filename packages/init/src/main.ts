@@ -65,8 +65,16 @@ async function addTemplates(args: IInitArgs): Promise<void> {
     const templateDockerfileSrc = joinPath(__dirname, '../templates/Dockerfile.template');
     const baseDockerfileDest = joinPath(args.workingDirectory ?? process.cwd(), args.baseDockerfileName);
     const templateDockerfileDest = joinPath(args.workingDirectory ?? process.cwd(), args.templateDockerFileName);
-    await fsPromises.copyFile(baseDockerfileSrc, baseDockerfileDest);
-    await fsPromises.copyFile(templateDockerfileSrc, templateDockerfileDest);
+    await copyIfNotExists(baseDockerfileSrc, baseDockerfileDest);
+    await copyIfNotExists(templateDockerfileSrc, templateDockerfileDest);
+}
+
+async function copyIfNotExists(source: string, dest: string,): Promise<void> {
+    if (existsSync(dest)) {
+        console.log(`Skipping copy of file "${dest}", since it exists.`);
+        return;
+    }
+    await fsPromises.copyFile(source, dest);
 }
 
 async function addConfig(args: IInitArgs): Promise<void> {
