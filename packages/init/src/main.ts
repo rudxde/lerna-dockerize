@@ -69,7 +69,7 @@ async function addTemplates(args: IInitArgs): Promise<void> {
     await copyIfNotExists(templateDockerfileSrc, templateDockerfileDest);
 }
 
-async function copyIfNotExists(source: string, dest: string,): Promise<void> {
+async function copyIfNotExists(source: string, dest: string): Promise<void> {
     if (existsSync(dest)) {
         console.log(`Skipping copy of file "${dest}", since it exists.`);
         return;
