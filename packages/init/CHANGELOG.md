@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/rudxde/lerna-dockerize/compare/v1.0.0...v1.0.1) (2022-07-22)
+
+
+### Bug Fixes
+
+* add workdir /app to each base dockerfile ([883820c](https://github.com/rudxde/lerna-dockerize/commit/883820c7656a11fa416329f7101176c25350b14d)), closes [#866](https://github.com/rudxde/lerna-dockerize/issues/866)
+* **init:** don't overwrite base and template dockerfile if already exist ([61fab6e](https://github.com/rudxde/lerna-dockerize/commit/61fab6ef24d810c7ff23db6758c446b5b89b24a0))
+
+
+
+
+
 # [1.0.0](https://github.com/rudxde/lerna-dockerize/compare/v0.9.5...v1.0.0) (2022-07-08)
 
 **Note:** Version bump only for package @lerna-dockerize/init
