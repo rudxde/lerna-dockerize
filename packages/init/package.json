@@ -35,7 +35,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "@types/inquirer": "^8.2.0",
+    "@types/inquirer": "^9.0.0",
     "@types/jasmine": "^4.0.0",
     "@types/node": "^18.0.0",
     "@types/npm-package-arg": "^6.1.0",
