@@ -42,7 +42,7 @@ export class Dockerize extends Command {
                 result.push(getDockerFileFromInstruction(baseStage.baseImage, baseStage.name, baseStage.platform));
                 result.push(...baseStage.stepsBeforeInstall);
                 if (baseStage.install) {
-                    result.push(`RUN ${this.args.packageManager} install`);
+                    result.push(this.baseStageInstallCommand(baseStage));
                     result.push(...baseStage.stepsAfterInstall);
                 }
             }
@@ -73,6 +73,26 @@ export class Dockerize extends Command {
             getLogger().error(err);
             process.exit(1);
         }
+    }
+
+    private baseStageInstallCommand(baseStage: DockerStage): string {
+        if (this.args.packageManager === 'yarn') {
+            return ([
+                'RUN',
+                this.args.packageManager,
+                'install',
+                ...(baseStage.install?.ci ? ['--frozen-lockfile'] : []),
+                ...(baseStage.install?.ignoreScripts ? ['--ignore-scripts'] : []),
+                ...(baseStage.install?.onlyProduction ? ['--production'] : []),
+            ].join(' '));
+        }
+        return ([
+            'RUN',
+            this.args.packageManager,
+            baseStage.install?.ci ? 'ci' : 'install',
+            ...(baseStage.install?.ignoreScripts ? ['--ignore-scripts'] : []),
+            ...(baseStage.install?.onlyProduction ? ['--production'] : []),
+        ].join(' '));
     }
 
     private async createFinalStage(baseStage: DockerStage, packages: Package[]): Promise<string[]> {
