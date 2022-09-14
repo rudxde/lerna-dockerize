@@ -1,6 +1,6 @@
 {
   "name": "@lerna-dockerize/logger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A dockerfile generator for lerna projects",
   "keywords": [
     "lerna",
