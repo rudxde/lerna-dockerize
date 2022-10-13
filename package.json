@@ -16,7 +16,7 @@
     "start": "lerna run start"
   },
   "devDependencies": {
-    "lerna": "^5.1.8"
+    "lerna": "^6.0.0"
   },
   "license": "Apache-2.0"
 }
