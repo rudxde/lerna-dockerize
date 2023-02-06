@@ -5,7 +5,7 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "bootstrap": "lerna bootstrap",
-    "publish:npm": "lerna run publish:npm --no-private -- -- --access public",
+    "publish:npm": "lerna run publish:npm --no-private -- --access public",
     "publish:since": "lerna run publish:npm --no-private --since $(git rev-parse HEAD^) -- -- --access public",
     "version": "lerna version --exact --conventional-commits --yes",
     "build": "lerna run build",
