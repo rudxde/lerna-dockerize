@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run version -- --no-git-tag-version --no-push --no-changelog --conventional-prerelease --force-publish --preid build.$(git rev-parse --short HEAD)
@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - uses: actions/download-artifact@v1
         with:
           name: update-version
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - uses: actions/download-artifact@v1
         with:
           name: update-version
@@ -63,7 +63,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - uses: actions/download-artifact@v1
         with:
           name: update-version
@@ -90,7 +90,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://registry.npmjs.org/
       - uses: actions/download-artifact@v1
         with:
