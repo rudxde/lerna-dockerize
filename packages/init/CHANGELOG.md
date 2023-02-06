@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/rudxde/lerna-dockerize/compare/v1.0.5...v1.0.6) (2023-02-06)
+
+
+### Bug Fixes
+
+* change required node engine in package.json to >=v14 ([fe528ce](https://github.com/rudxde/lerna-dockerize/commit/fe528ce78fa7495ed64569c6b0dd57cbe7b344a4))
+
+
+
+
+
 ## [1.0.5](https://github.com/rudxde/lerna-dockerize/compare/v1.0.4...v1.0.5) (2022-10-26)
 
 **Note:** Version bump only for package @lerna-dockerize/init

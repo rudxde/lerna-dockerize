@@ -1,6 +1,6 @@
 {
   "name": "@lerna-dockerize/cli",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A dockerfile generator for lerna projects",
   "keywords": [
     "lerna",
@@ -23,7 +23,7 @@
   "repository": "https://github.com/rudxde/lerna-dockerize",
   "bugs": "https://github.com/rudxde/lerna-dockerize",
   "dependencies": {
-    "@lerna-dockerize/logger": "1.0.5",
+    "@lerna-dockerize/logger": "1.0.6",
     "yargs": "^17.0.1"
   },
   "devDependencies": {
