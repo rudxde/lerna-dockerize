@@ -7,6 +7,10 @@ on:
   push:
     branches: [ master ]
 
+concurrency:
+  group: pre_release
+  cancel-in-progress: true
+
 jobs:
   update-version:
     runs-on: ubuntu-latest
