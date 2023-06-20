@@ -1,5 +1,10 @@
 # lerna-dockerize
 
+>  .  
+> **Please read the issue about the discontinuation of lerna-dockerize: [Discontinuation of Active Maintenance for "lerna-dockerize"](https://github.com/rudxde/lerna-dockerize/issues/2055)**  
+>  .
+
+
 [![build and test](https://github.com/rudxde/lerna-dockerize/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/rudxde/lerna-dockerize/actions/workflows/build-and-test.yml)
 
 lerna-dockerize is a package, that generates a dockerfile for lerna (see [github/lerna](https://github.com/lerna/lerna) for more information about lerna) projects. 
